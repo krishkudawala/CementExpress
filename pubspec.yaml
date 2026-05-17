@@ -1,0 +1,41 @@
+name: cementexpress
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.1.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/cementpic.jpg
+    - assets/images/cementpic2.jpg
+    - assets/images/cementpic3.jpg
+    - assets/images/cementpic4.jpg
+    - assets/images/building.jpg
+    - assets/images/halment.jpg
+    - assets/images/persion.jpg
+    - assets/images/truckut.jpg
+    - assets/images/acc.jpg
+    - assets/images/ambuja.jpg
+    - assets/images/jk.jpg
+    - assets/images/shree.jpg
+    - assets/images/ultratech.jpg
+    - assets/images/construction.png
+    - assets/images/homeconstruction.png
+    - assets/images/support.png
+    - assets/images/plan.png
+    - assets/images/hourssupport.png
+    - assets/icons/logo.png
