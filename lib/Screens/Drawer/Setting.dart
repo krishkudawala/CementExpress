@@ -1,4 +1,14 @@
+import 'package:cementexpress/Screens/Drawer/about/aboutapp.dart';
+import 'package:cementexpress/Screens/Drawer/helpcenter/helpcenter.dart';
+import 'package:cementexpress/Screens/Login/login_page.dart';
+import 'package:cementexpress/Screens/bottomnavigation/orders.dart';
+import 'package:cementexpress/Screens/bottomnavigation/profile.dart';
+import 'package:cementexpress/Screens/forget/forget_password.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../main.dart';
+
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -10,31 +20,50 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
 
   bool notification = true;
-  bool darkMode = false;
   bool location = true;
 
   @override
   Widget build(BuildContext context) {
 
+    // PROVIDER
+    final themeProvider =
+    Provider.of<ThemeProvider>(context);
+
+    bool isDark = themeProvider.isDark;
+
+    // COLORS
+    Color bgColor =
+    isDark ? Colors.black : Colors.grey.shade100;
+
+    Color cardColor =
+    isDark ? Colors.grey.shade900 : Colors.white;
+
+    Color textColor =
+    isDark ? Colors.white : Colors.black87;
+
+    Color subtitleColor =
+    isDark ? Colors.grey.shade400 : Colors.grey;
+
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
+
+      backgroundColor: bgColor,
 
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: cardColor,
         elevation: 0,
 
         centerTitle: true,
 
-        title: const Text(
+        title: Text(
           "Settings",
           style: TextStyle(
-            color: Colors.black87,
+            color: textColor,
             fontWeight: FontWeight.bold,
           ),
         ),
 
-        iconTheme: const IconThemeData(
-          color: Colors.black,
+        iconTheme: IconThemeData(
+          color: textColor,
         ),
       ),
 
@@ -47,12 +76,14 @@ class _SettingsPageState extends State<SettingsPage> {
 
             // PROFILE CARD
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
+              margin: const EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
 
               padding: const EdgeInsets.all(16),
 
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: cardColor,
                 borderRadius: BorderRadius.circular(18),
               ),
 
@@ -74,23 +105,26 @@ class _SettingsPageState extends State<SettingsPage> {
 
                   Expanded(
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      crossAxisAlignment:
+                      CrossAxisAlignment.start,
+
+                      children: [
 
                         Text(
                           "Krish Kudawala",
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
+                            color: textColor,
                           ),
                         ),
 
-                        SizedBox(height: 4),
+                        const SizedBox(height: 4),
 
                         Text(
                           "krish@gmail.com",
                           style: TextStyle(
-                            color: Colors.grey,
+                            color: subtitleColor,
                           ),
                         ),
                       ],
@@ -98,9 +132,20 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
 
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                          const ProfilePage(),
+                        ),
+                      );
+                    },
 
-                    icon: const Icon(Icons.edit),
+                    icon: Icon(
+                      Icons.edit,
+                      color: textColor,
+                    ),
                   ),
                 ],
               ),
@@ -109,84 +154,66 @@ class _SettingsPageState extends State<SettingsPage> {
             const SizedBox(height: 25),
 
             // GENERAL
-            buildTitle("General"),
+            buildTitle("General", textColor),
 
-            buildTile(
-              icon: Icons.notifications_none,
-              title: "Notifications",
 
-              trailing: Switch(
-                value: notification,
-
-                activeColor: Colors.deepOrange,
-
-                onChanged: (value) {
-
-                  setState(() {
-                    notification = value;
-                  });
-
-                },
-              ),
-            ),
-
+            // DARK MODE
             buildTile(
               icon: Icons.dark_mode_outlined,
               title: "Dark Mode",
+              textColor: textColor,
+              cardColor: cardColor,
 
               trailing: Switch(
-                value: darkMode,
+
+                value: themeProvider.isDark,
 
                 activeColor: Colors.deepOrange,
 
                 onChanged: (value) {
 
-                  setState(() {
-                    darkMode = value;
-                  });
-
+                  themeProvider.toggleTheme(value);
                 },
               ),
             ),
 
-            buildTile(
-              icon: Icons.location_on_outlined,
-              title: "Location Access",
 
-              trailing: Switch(
-                value: location,
-
-                activeColor: Colors.deepOrange,
-
-                onChanged: (value) {
-
-                  setState(() {
-                    location = value;
-                  });
-
-                },
-              ),
-            ),
 
             const SizedBox(height: 20),
 
             // ACCOUNT
-            buildTitle("Account"),
+            buildTitle("Account", textColor),
 
             buildTile(
               icon: Icons.lock_outline,
               title: "Change Password",
+              textColor: textColor,
+              cardColor: cardColor,
 
-              trailing: const Icon(Icons.arrow_forward_ios, size: 18),
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                size: 18,
+                color: textColor,
+              ),
 
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => ForgetPassword()
+                ));
+              },
             ),
 
             buildTile(
               icon: Icons.payment_outlined,
               title: "Payment Methods",
+              textColor: textColor,
+              cardColor: cardColor,
 
-              trailing: const Icon(Icons.arrow_forward_ios, size: 18),
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                size: 18,
+                color: textColor,
+              ),
 
               onTap: () {},
             ),
@@ -194,53 +221,153 @@ class _SettingsPageState extends State<SettingsPage> {
             buildTile(
               icon: Icons.history,
               title: "Order History",
+              textColor: textColor,
+              cardColor: cardColor,
 
-              trailing: const Icon(Icons.arrow_forward_ios, size: 18),
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                size: 18,
+                color: textColor,
+              ),
 
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => OrdersPage()
+                ));
+              },
             ),
 
             const SizedBox(height: 20),
 
             // SUPPORT
-            buildTitle("Support"),
+            buildTitle("Support", textColor),
 
             buildTile(
               icon: Icons.help_outline,
               title: "Help Center",
+              textColor: textColor,
+              cardColor: cardColor,
 
-              trailing: const Icon(Icons.arrow_forward_ios, size: 18),
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                size: 18,
+                color: textColor,
+              ),
 
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                    const HelpCenterPage(),
+                  ),
+                );
+              },
             ),
 
             buildTile(
               icon: Icons.info_outline,
               title: "About App",
+              textColor: textColor,
+              cardColor: cardColor,
 
-              trailing: const Icon(Icons.arrow_forward_ios, size: 18),
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                size: 18,
+                color: textColor,
+              ),
 
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                    const AboutAppPage(),
+                  ),
+                );
+              },
             ),
 
             const SizedBox(height: 30),
 
             // LOGOUT BUTTON
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding:
+              const EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
 
               child: SizedBox(
                 width: double.infinity,
                 height: 55,
 
                 child: ElevatedButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+
+                    showDialog(
+                      context: context,
+
+                      builder: (context) {
+
+                        return AlertDialog(
+
+                          backgroundColor: cardColor,
+
+                          title: Text(
+                            'Logout',
+                            style: TextStyle(
+                              color: textColor,
+                            ),
+                          ),
+
+                          content: Text(
+                            'Are you sure you want to logout',
+                            style: TextStyle(
+                              color: textColor,
+                            ),
+                          ),
+
+                          actions: [
+
+                            ElevatedButton(
+                              onPressed: () {
+
+                                Navigator.pop(context);
+
+                              },
+
+                              child: const Text('No'),
+                            ),
+
+                            ElevatedButton(
+                              onPressed: () {
+
+                                Navigator.push(
+                                  context,
+
+                                  MaterialPageRoute(
+                                    builder: (context) {
+
+                                      return LoginPage();
+                                    },
+                                  ),
+                                );
+                              },
+
+                              child: const Text('Yes'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
 
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
 
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
+                      borderRadius:
+                      BorderRadius.circular(14),
                     ),
                   ),
 
@@ -269,10 +396,14 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   // SECTION TITLE
-  Widget buildTitle(String title) {
+  Widget buildTitle(
+      String title,
+      Color textColor,
+      ) {
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 18),
+      padding:
+      const EdgeInsets.symmetric(horizontal: 18),
 
       child: Align(
         alignment: Alignment.centerLeft,
@@ -282,7 +413,7 @@ class _SettingsPageState extends State<SettingsPage> {
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            color: Colors.grey.shade700,
+            color: textColor,
           ),
         ),
       ),
@@ -293,6 +424,8 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget buildTile({
     required IconData icon,
     required String title,
+    required Color textColor,
+    required Color cardColor,
     Widget? trailing,
     VoidCallback? onTap,
   }) {
@@ -304,11 +437,12 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
 
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: cardColor,
         borderRadius: BorderRadius.circular(16),
       ),
 
       child: ListTile(
+
         leading: Icon(
           icon,
           color: Colors.deepOrange,
@@ -316,8 +450,9 @@ class _SettingsPageState extends State<SettingsPage> {
 
         title: Text(
           title,
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.w500,
+            color: textColor,
           ),
         ),
 

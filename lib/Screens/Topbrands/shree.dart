@@ -1,3 +1,4 @@
+import 'package:cementexpress/Screens/payment/payment_screen.dart';
 import 'package:flutter/material.dart';
 
 class ShreeCementPage extends StatelessWidget {
@@ -238,7 +239,12 @@ class ShreeCementPage extends StatelessWidget {
                               height: 42,
 
                               child: ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                      context, MaterialPageRoute(
+                                      builder: (context) => PaymentPage()
+                                  ));
+                                },
 
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor:

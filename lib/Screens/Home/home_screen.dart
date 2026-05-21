@@ -180,16 +180,27 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               onTap: () {
-
-                Navigator.pushAndRemoveUntil(
-                  context,
-
-                  MaterialPageRoute(
-                    builder: (context) =>
-                    const LoginPage(),
-                  ),
-
-                      (route) => false,
+                showDialog(context: context
+                    , builder: (context) {
+                      return AlertDialog(
+                        title: Text('Logout'),
+                        content: Text('Are you sure you want to logout'),
+                        actions: [
+                          ElevatedButton(onPressed: (){
+                            Navigator.pop(context);
+                          }
+                              , child: Text('No')
+                          ),
+                          ElevatedButton(onPressed: (){
+                            Navigator.push(context, MaterialPageRoute(builder:(context){
+                              return LoginPage();
+                            }
+                            ));
+                          }
+                              , child: Text('Yes')),
+                        ],
+                      );
+                    }
                 );
               },
             ),

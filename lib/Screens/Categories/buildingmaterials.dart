@@ -1,3 +1,5 @@
+import 'package:cementexpress/Screens/bottomnavigation/profile.dart';
+import 'package:cementexpress/Screens/payment/payment_screen.dart';
 import 'package:flutter/material.dart';
 
 class BuildingMaterialPage extends StatelessWidget {
@@ -191,7 +193,12 @@ class BuildingMaterialPage extends StatelessWidget {
                               height: 42,
 
                               child: ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                      context, MaterialPageRoute(
+                                      builder: (context) => PaymentPage()
+                                  ));
+                                },
 
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.deepOrange,

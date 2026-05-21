@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "254705677664",
+    "project_id": "cementexpress-c3609",
+    "storage_bucket": "cementexpress-c3609.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:254705677664:android:2d0da2a783b857bdc69a05",
+        "android_client_info": {
+          "package_name": "com.cement.cementexpress"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbxszcOVxGjvC0XWnZFSlLSgYHsCS8efw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

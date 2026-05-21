@@ -1,5 +1,7 @@
 import 'package:cementexpress/Screens/Home/home_screen.dart';
 import 'package:cementexpress/Screens/Signup/signup.dart';
+import 'package:cementexpress/Screens/forget/forget_password.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -11,11 +13,54 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
 
-  TextEditingController email = TextEditingController();
-  TextEditingController password = TextEditingController();
+  // CONTROLLERS
+  final TextEditingController email =
+  TextEditingController();
 
-  GlobalKey<FormState> formkey = GlobalKey<FormState>();
+  final TextEditingController password =
+  TextEditingController();
 
+  // FORM KEY
+  final GlobalKey<FormState> formkey =
+  GlobalKey<FormState>();
+
+  // FIREBASE AUTH
+  final FirebaseAuth auth =
+      FirebaseAuth.instance;
+
+  bool loading = false;
+
+  // LOGIN FUNCTION
+  Future<void> login() async {
+
+    try {
+
+      await auth.signInWithEmailAndPassword(
+
+        email: email.text.trim(),
+
+        password: password.text.trim(),
+      );
+
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(
+              builder: (context) =>HomeScreen()
+          ), (value) =>false);
+
+    } on FirebaseAuthException catch (e) {
+
+      ScaffoldMessenger.of(context).showSnackBar(
+
+        SnackBar(
+          content: Text(
+            e.message.toString(),
+          ),
+        ),
+      );
+    }
+  }
+
+  // IMAGE LIST
   List<String> banners = [
 
     "assets/images/cementpic.jpg",
@@ -28,21 +73,27 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+
       backgroundColor: Colors.white,
 
       body: SingleChildScrollView(
 
         child: Form(
+
           key: formkey,
 
           child: Column(
+
             children: [
 
               // ================= IMAGE SLIDER =================
+
               SizedBox(
+
                 height: 300,
 
                 child: PageView.builder(
+
                   itemCount: banners.length,
 
                   itemBuilder: (context, index) {
@@ -51,13 +102,23 @@ class _LoginPageState extends State<LoginPage> {
 
                       decoration: BoxDecoration(
 
-                        borderRadius: const BorderRadius.only(
-                          bottomLeft: Radius.circular(30),
-                          bottomRight: Radius.circular(30),
+                        borderRadius:
+                        const BorderRadius.only(
+
+                          bottomLeft:
+                          Radius.circular(30),
+
+                          bottomRight:
+                          Radius.circular(30),
                         ),
 
                         image: DecorationImage(
-                          image: AssetImage(banners[index]),
+
+                          image:
+                          AssetImage(
+                            banners[index],
+                          ),
+
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -69,57 +130,83 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 35),
 
               // ================= LOGIN CONTENT =================
+
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+
+                padding:
+                const EdgeInsets.symmetric(
+                  horizontal: 24,
+                ),
 
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+
+                  crossAxisAlignment:
+                  CrossAxisAlignment.center,
+
                   children: [
 
                     // TITLE
+
                     const Text(
+
                       "India's #1 Cement App",
 
                       style: TextStyle(
                         fontSize: 26,
-                        fontWeight: FontWeight.bold,
+                        fontWeight:
+                        FontWeight.bold,
                       ),
                     ),
 
                     const SizedBox(height: 10),
 
                     const Text(
+
                       'Log in or sign up',
 
                       style: TextStyle(
                         fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                        fontWeight:
+                        FontWeight.bold,
                       ),
                     ),
 
                     const SizedBox(height: 30),
 
                     // ================= EMAIL =================
+
                     TextFormField(
+
                       controller: email,
+
+                      keyboardType:
+                      TextInputType.emailAddress,
 
                       decoration: InputDecoration(
 
-                        prefixIcon: const Icon(Icons.email),
+                        prefixIcon:
+                        const Icon(Icons.email),
 
-                        hintText: 'Enter Your Email',
+                        hintText:
+                        'Enter Your Email',
 
                         labelText: 'Email',
 
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
+                        border:
+                        OutlineInputBorder(
+
+                          borderRadius:
+                          BorderRadius.circular(15),
                         ),
                       ),
 
                       validator: (value) {
 
-                        if (value == null || value.isEmpty) {
-                          return "Please Enter Email";
+                        if (value == null ||
+                            value.isEmpty) {
+
+                          return
+                            "Please Enter Email";
                         }
 
                         return null;
@@ -129,27 +216,38 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 20),
 
                     // ================= PASSWORD =================
+
                     TextFormField(
+
                       controller: password,
+
                       obscureText: true,
 
                       decoration: InputDecoration(
 
-                        prefixIcon: const Icon(Icons.lock),
+                        prefixIcon:
+                        const Icon(Icons.lock),
 
-                        hintText: 'Enter Password',
+                        hintText:
+                        'Enter Password',
 
                         labelText: 'Password',
 
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
+                        border:
+                        OutlineInputBorder(
+
+                          borderRadius:
+                          BorderRadius.circular(15),
                         ),
                       ),
 
                       validator: (value) {
 
-                        if (value == null || value.isEmpty) {
-                          return "Please Enter Password";
+                        if (value == null ||
+                            value.isEmpty) {
+
+                          return
+                            "Please Enter Password";
                         }
 
                         return null;
@@ -159,7 +257,16 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 30),
 
                     // ================= LOGIN BUTTON =================
-                    SizedBox(
+
+                    loading
+
+                        ? const Center(
+                      child:
+                      CircularProgressIndicator(),
+                    )
+
+                        : SizedBox(
+
                       width: double.infinity,
                       height: 55,
 
@@ -167,31 +274,36 @@ class _LoginPageState extends State<LoginPage> {
 
                         onPressed: () {
 
-                          if (formkey.currentState!.validate()) {
+                          if (formkey
+                              .currentState!
+                              .validate()) {
 
-                            Navigator.push(
-                              context,
-
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                const HomeScreen(),
-                              ),
-                            );
+                            login();
                           }
                         },
 
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blueGrey,
-                          foregroundColor: Colors.white,
+                        style:
+                        ElevatedButton.styleFrom(
 
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
+                          backgroundColor:
+                          Colors.blueGrey,
+
+                          foregroundColor:
+                          Colors.white,
+
+                          shape:
+                          RoundedRectangleBorder(
+
+                            borderRadius:
+                            BorderRadius.circular(15),
                           ),
                         ),
 
-                        icon: const Icon(Icons.login),
+                        icon:
+                        const Icon(Icons.login),
 
                         label: const Text(
+
                           'Continue',
 
                           style: TextStyle(
@@ -201,16 +313,37 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
 
-                    const SizedBox(height: 35),
+                    const SizedBox(height: 15),
 
+                    Align(
+                      alignment: Alignment.centerRight,
+
+                      child: TextButton(
+
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (context) =>ForgetPassword()
+                          ));
+                        },
+
+                        child: const Text(
+                          'Forget Password ?',
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 35),
                     // ================= SIGNUP =================
+
                     Row(
+
                       mainAxisAlignment:
                       MainAxisAlignment.center,
 
                       children: [
 
                         const Text(
+
                           "New here? ",
 
                           style: TextStyle(
@@ -223,9 +356,11 @@ class _LoginPageState extends State<LoginPage> {
                           onTap: () {
 
                             Navigator.push(
+
                               context,
 
                               MaterialPageRoute(
+
                                 builder: (context) =>
                                 const Signup(),
                               ),
@@ -233,11 +368,15 @@ class _LoginPageState extends State<LoginPage> {
                           },
 
                           child: const Text(
+
                             "Create an account",
 
                             style: TextStyle(
-                              color: Colors.deepOrange,
-                              fontWeight: FontWeight.bold,
+                              color:
+                              Colors.deepOrange,
+
+                              fontWeight:
+                              FontWeight.bold,
                             ),
                           ),
                         ),
@@ -247,6 +386,7 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 30),
 
                     // ================= TERMS =================
+
                     const Text(
                       'By Continuing, you agree to our',
                     ),
@@ -254,6 +394,7 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 5),
 
                     const Text(
+
                       'Terms of Service • Privacy Policy • Content Policy',
 
                       textAlign: TextAlign.center,
