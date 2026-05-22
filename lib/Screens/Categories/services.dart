@@ -17,58 +17,94 @@ class ServicesPage extends StatelessWidget {
 
       {
         "title": "Interior Design",
-        "subtitle": "Modern home interior services",
-        "icon": Icons.chair_alt_outlined,
+        "subtitle":
+        "Modern home interior services",
+
+        "icon":
+        Icons.chair_alt_outlined,
+
         "color": Colors.purple,
       },
 
       {
         "title": "Painting Service",
-        "subtitle": "Professional wall painting",
-        "icon": Icons.format_paint_outlined,
+
+        "subtitle":
+        "Professional wall painting",
+
+        "icon":
+        Icons.format_paint_outlined,
+
         "color": Colors.blue,
       },
 
       {
         "title": "Electrical Work",
-        "subtitle": "Safe electrical installations",
-        "icon": Icons.electrical_services_outlined,
+
+        "subtitle":
+        "Safe electrical installations",
+
+        "icon":
+        Icons.electrical_services_outlined,
+
         "color": Colors.amber,
       },
 
       {
         "title": "Plumbing",
-        "subtitle": "Professional plumbing solutions",
-        "icon": Icons.plumbing_outlined,
+
+        "subtitle":
+        "Professional plumbing solutions",
+
+        "icon":
+        Icons.plumbing_outlined,
+
         "color": Colors.teal,
       },
 
       {
         "title": "Architecture",
-        "subtitle": "2D & 3D house planning",
-        "icon": Icons.architecture_outlined,
+
+        "subtitle":
+        "2D & 3D house planning",
+
+        "icon":
+        Icons.architecture_outlined,
+
         "color": Colors.green,
       },
 
       {
         "title": "Flooring",
-        "subtitle": "Tiles, marble & wood flooring",
-        "icon": Icons.grid_view_outlined,
+
+        "subtitle":
+        "Tiles, marble & wood flooring",
+
+        "icon":
+        Icons.grid_view_outlined,
+
         "color": Colors.indigo,
       },
 
       {
         "title": "Furniture",
-        "subtitle": "Modern furniture solutions",
-        "icon": Icons.weekend_outlined,
+
+        "subtitle":
+        "Modern furniture solutions",
+
+        "icon":
+        Icons.weekend_outlined,
+
         "color": Colors.brown,
       },
     ];
 
     return Scaffold(
+
       backgroundColor: Colors.white,
 
       appBar: AppBar(
+
         backgroundColor: Colors.white,
         elevation: 0,
 
@@ -76,6 +112,7 @@ class ServicesPage extends StatelessWidget {
 
         title: const Text(
           "Our Services",
+
           style: TextStyle(
             color: Colors.black87,
             fontWeight: FontWeight.bold,
@@ -90,18 +127,24 @@ class ServicesPage extends StatelessWidget {
       body: SingleChildScrollView(
 
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment:
+          CrossAxisAlignment.start,
+
           children: [
 
-            // TOP BANNER
+            // ================= TOP BANNER =================
             Container(
+
               margin: const EdgeInsets.all(16),
               height: 190,
 
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(22),
+
+                borderRadius:
+                BorderRadius.circular(22),
 
                 image: const DecorationImage(
+
                   image: NetworkImage(
                     "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85",
                   ),
@@ -111,161 +154,273 @@ class ServicesPage extends StatelessWidget {
               ),
 
               child: Container(
-                padding: const EdgeInsets.all(20),
+
+                padding:
+                const EdgeInsets.all(20),
 
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(22),
+
+                  borderRadius:
+                  BorderRadius.circular(22),
 
                   gradient: LinearGradient(
+
                     colors: [
-                      Colors.black.withOpacity(0.7),
+
+                      Colors.black.withOpacity(
+                        0.7,
+                      ),
+
                       Colors.transparent,
                     ],
 
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
+                    begin:
+                    Alignment.bottomCenter,
+
+                    end:
+                    Alignment.topCenter,
                   ),
                 ),
 
                 child: const Align(
-                  alignment: Alignment.bottomLeft,
+
+                  alignment:
+                  Alignment.bottomLeft,
 
                   child: Text(
                     "Professional Construction Services",
+
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 28,
-                      fontWeight: FontWeight.bold,
+                      fontWeight:
+                      FontWeight.bold,
                     ),
                   ),
                 ),
               ),
             ),
 
+            // ================= TITLE =================
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 18),
+
+              padding:
+              EdgeInsets.symmetric(
+                horizontal: 18,
+              ),
 
               child: Text(
                 "Available Services",
+
                 style: TextStyle(
                   fontSize: 22,
-                  fontWeight: FontWeight.bold,
+                  fontWeight:
+                  FontWeight.bold,
                 ),
               ),
             ),
 
             const SizedBox(height: 15),
 
-            // GRID VIEW
+            // ================= GRID VIEW =================
             GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
 
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              shrinkWrap: true,
+
+              physics:
+              const NeverScrollableScrollPhysics(),
+
+              padding:
+              const EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
 
               itemCount: services.length,
 
               gridDelegate:
-              const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
+              SliverGridDelegateWithFixedCrossAxisCount(
+
+                crossAxisCount:
+                MediaQuery.of(context)
+                    .size
+                    .width <
+                    600
+                    ? 2
+                    : 3,
 
                 crossAxisSpacing: 15,
                 mainAxisSpacing: 15,
 
-                childAspectRatio: 0.90,
+                childAspectRatio:
+                MediaQuery.of(context)
+                    .size
+                    .width <
+                    600
+                    ? 0.72
+                    : 0.90,
               ),
 
               itemBuilder: (context, index) {
 
-                final item = services[index];
+                final item =
+                services[index];
 
                 return Container(
 
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
+
+                    borderRadius:
+                    BorderRadius.circular(
+                      20,
+                    ),
 
                     boxShadow: [
+
                       BoxShadow(
-                        color: Colors.grey.shade200,
+                        color:
+                        Colors.grey.shade200,
+
                         blurRadius: 6,
-                        offset: const Offset(0, 3),
+
+                        offset:
+                        const Offset(0, 3),
                       ),
                     ],
                   ),
 
                   child: Padding(
-                    padding: const EdgeInsets.all(16),
+
+                    padding:
+                    const EdgeInsets.all(
+                      16,
+                    ),
 
                     child: Column(
+
                       crossAxisAlignment:
-                      CrossAxisAlignment.start,
+                      CrossAxisAlignment
+                          .start,
+
                       mainAxisAlignment:
-                      MainAxisAlignment.spaceBetween,
+                      MainAxisAlignment
+                          .spaceBetween,
 
                       children: [
 
+                        // ================= ICON =================
                         CircleAvatar(
+
                           radius: 28,
 
                           backgroundColor:
-                          item['color'].withOpacity(0.15),
+                          item['color']
+                              .withOpacity(
+                            0.15,
+                          ),
 
                           child: Icon(
                             item['icon'],
-                            color: item['color'],
+
+                            color:
+                            item['color'],
+
                             size: 30,
                           ),
                         ),
 
+                        // ================= TEXT =================
                         Column(
+
                           crossAxisAlignment:
-                          CrossAxisAlignment.start,
+                          CrossAxisAlignment
+                              .start,
+
                           children: [
 
                             Text(
                               item['title'],
 
-                              style: const TextStyle(
+                              maxLines: 1,
+
+                              overflow:
+                              TextOverflow
+                                  .ellipsis,
+
+                              style:
+                              const TextStyle(
                                 fontSize: 17,
-                                fontWeight: FontWeight.bold,
+
+                                fontWeight:
+                                FontWeight
+                                    .bold,
                               ),
                             ),
 
-                            const SizedBox(height: 6),
+                            const SizedBox(
+                              height: 6,
+                            ),
 
                             Text(
                               item['subtitle'],
 
-                              style: TextStyle(
-                                color: Colors.grey.shade600,
+                              maxLines: 2,
+
+                              overflow:
+                              TextOverflow
+                                  .ellipsis,
+
+                              style:
+                              TextStyle(
+                                color: Colors
+                                    .grey
+                                    .shade600,
+
                                 fontSize: 13,
                               ),
                             ),
                           ],
                         ),
 
+                        // ================= BUTTON =================
                         SizedBox(
-                          width: double.infinity,
+
+                          width:
+                          double.infinity,
+
                           height: 40,
 
-                          child: ElevatedButton(
+                          child:
+                          ElevatedButton(
+
                             onPressed: () {},
 
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: item['color'],
+                            style:
+                            ElevatedButton
+                                .styleFrom(
 
-                              shape: RoundedRectangleBorder(
+                              backgroundColor:
+                              item['color'],
+
+                              shape:
+                              RoundedRectangleBorder(
+
                                 borderRadius:
-                                BorderRadius.circular(12),
+                                BorderRadius.circular(
+                                  12,
+                                ),
                               ),
                             ),
 
                             child: const Text(
                               "Book Now",
+
                               style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
+                                color:
+                                Colors.white,
+
+                                fontWeight:
+                                FontWeight.bold,
                               ),
                             ),
                           ),

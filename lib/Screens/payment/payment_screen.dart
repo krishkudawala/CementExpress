@@ -1,273 +1,271 @@
 import 'package:flutter/material.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class PaymentPage extends StatefulWidget {
   const PaymentPage({super.key});
 
   @override
-  State<PaymentPage> createState() =>
-      _PaymentPageState();
+  State<PaymentPage> createState() => _PaymentPageState();
 }
 
-class _PaymentPageState
-    extends State<PaymentPage> {
+class _PaymentPageState extends State<PaymentPage> {
+  late Razorpay razorpay;
 
-  String selectedPayment =
-      "Cash on Delivery";
+  @override
+  void initState() {
+    super.initState();
 
-  bool loading = false;
+    razorpay = Razorpay();
 
-  // PLACE ORDER
-  Future<void> placeOrder() async {
-
-    setState(() {
-      loading = true;
-    });
-
-    await Future.delayed(
-      const Duration(seconds: 2),
+    // SUCCESS
+    razorpay.on(
+      Razorpay.EVENT_PAYMENT_SUCCESS,
+      handlePaymentSuccess,
     );
 
-    setState(() {
-      loading = false;
-    });
+    // ERROR
+    razorpay.on(
+      Razorpay.EVENT_PAYMENT_ERROR,
+      handlePaymentError,
+    );
 
-    ScaffoldMessenger.of(context)
-        .showSnackBar(
+    // EXTERNAL WALLET
+    razorpay.on(
+      Razorpay.EVENT_EXTERNAL_WALLET,
+      handleExternalWallet,
+    );
+  }
 
-      SnackBar(
+  // OPEN PAYMENT
+  void openPayment() {
+    var options = {
+      // TEST KEY
+      'key': 'rzp_test_SsMf2KMfJMATzw',
 
+      // AMOUNT IN PAISE
+      'amount': 4500 * 100,
+
+      'name': 'Cement Express',
+
+      'description': 'Payment For Cement Order',
+
+      'prefill': {
+        'contact': '9876543210',
+        'email': 'test@gmail.com',
+      },
+
+      'theme': {
+        'color': '#FF9800',
+      },
+
+      'external': {
+        'wallets': ['paytm']
+      }
+    };
+
+    try {
+      razorpay.open(options);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  // PAYMENT SUCCESS
+  void handlePaymentSuccess(
+      PaymentSuccessResponse response) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
         content: Text(
-          "Order Placed via $selectedPayment",
+          "Payment Successful",
         ),
-
         backgroundColor: Colors.green,
       ),
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-
-    return Scaffold(
-
-      appBar: AppBar(
-        title: const Text("Payment"),
-        centerTitle: true,
+  // PAYMENT ERROR
+  void handlePaymentError(
+      PaymentFailureResponse response) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text(
+          "Payment Failed",
+        ),
+        backgroundColor: Colors.red,
       ),
+    );
+  }
 
-      body: Padding(
-
-        padding: const EdgeInsets.all(20),
-
-        child: Column(
-
-          crossAxisAlignment:
-          CrossAxisAlignment.start,
-
-          children: [
-
-            // TOTAL
-            Container(
-
-              padding: const EdgeInsets.all(20),
-
-              decoration: BoxDecoration(
-
-                color: Colors.deepOrange.shade50,
-
-                borderRadius:
-                BorderRadius.circular(20),
-              ),
-
-              child: Row(
-
-                children: [
-
-                  const Icon(
-                    Icons.shopping_cart,
-                    size: 40,
-                    color: Colors.deepOrange,
-                  ),
-
-                  const SizedBox(width: 15),
-
-                  Column(
-
-                    crossAxisAlignment:
-                    CrossAxisAlignment.start,
-
-                    children: const [
-
-                      Text(
-
-                        "Total Amount",
-
-                        style: TextStyle(
-                          fontSize: 16,
-                        ),
-                      ),
-
-                      SizedBox(height: 5),
-
-                      Text(
-
-                        "₹0",
-
-                        style: TextStyle(
-
-                          fontSize: 28,
-
-                          fontWeight:
-                          FontWeight.bold,
-
-                          color:
-                          Colors.deepOrange,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 30),
-
-            // TITLE
-            const Text(
-
-              "Select Payment Method",
-
-              style: TextStyle(
-
-                fontSize: 20,
-
-                fontWeight:
-                FontWeight.bold,
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            // COD
-            _buildPaymentTile(
-              title: "Cash on Delivery",
-              icon: Icons.money,
-            ),
-
-            // UPI
-            _buildPaymentTile(
-              title: "UPI Payment",
-              icon: Icons.qr_code,
-            ),
-
-            // CARD
-            _buildPaymentTile(
-              title: "Debit / Credit Card",
-              icon: Icons.credit_card,
-            ),
-
-            // NET BANKING
-            _buildPaymentTile(
-              title: "Net Banking",
-              icon: Icons.account_balance,
-            ),
-
-            const Spacer(),
-
-            // PAY BUTTON
-            SizedBox(
-
-              width: double.infinity,
-              height: 55,
-
-              child: ElevatedButton(
-
-                onPressed:
-                loading ? null : placeOrder,
-
-                style:
-                ElevatedButton.styleFrom(
-
-                  backgroundColor:
-                  Colors.deepOrange,
-
-                  foregroundColor:
-                  Colors.white,
-
-                  shape:
-                  RoundedRectangleBorder(
-
-                    borderRadius:
-                    BorderRadius.circular(15),
-                  ),
-                ),
-
-                child: loading
-
-                    ? const CircularProgressIndicator(
-                  color: Colors.white,
-                )
-
-                    : const Text(
-
-                  "Place Order",
-
-                  style: TextStyle(
-
-                    fontSize: 18,
-
-                    fontWeight:
-                    FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-          ],
+  // EXTERNAL WALLET
+  void handleExternalWallet(
+      ExternalWalletResponse response) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text(
+          "External Wallet Selected",
         ),
       ),
     );
   }
 
-  // PAYMENT TILE
-  Widget _buildPaymentTile({
+  @override
+  void dispose() {
+    razorpay.clear();
+    super.dispose();
+  }
 
-    required String title,
-    required IconData icon,
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xffF5F5F5),
 
-  }) {
-
-    return Card(
-
-      elevation: 2,
-
-      margin:
-      const EdgeInsets.only(bottom: 15),
-
-      shape: RoundedRectangleBorder(
-        borderRadius:
-        BorderRadius.circular(15),
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.orange,
+        centerTitle: true,
+        title: const Text(
+          "Secure Payment",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
 
-      child: RadioListTile(
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
 
-        value: title,
+          child: Container(
+            padding: const EdgeInsets.all(20),
 
-        groupValue: selectedPayment,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(25),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.2),
+                  blurRadius: 10,
+                  spreadRadius: 2,
+                  offset: const Offset(0, 5),
+                ),
+              ],
+            ),
 
-        onChanged: (value) {
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
 
-          setState(() {
+                // ICON
+                Container(
+                  height: 100,
+                  width: 100,
 
-            selectedPayment =
-                value.toString();
-          });
-        },
+                  decoration: BoxDecoration(
+                    color: Colors.orange.shade100,
+                    shape: BoxShape.circle,
+                  ),
 
-        title: Text(title),
+                  child: const Icon(
+                    Icons.account_balance_wallet,
+                    size: 55,
+                    color: Colors.orange,
+                  ),
+                ),
 
-        secondary: Icon(
-          icon,
-          color: Colors.deepOrange,
+                const SizedBox(height: 20),
+
+                // TITLE
+                const Text(
+                  "Cement Express",
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                const SizedBox(height: 10),
+
+                // DESCRIPTION
+                const Text(
+                  "Complete your payment securely using Razorpay",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey,
+                  ),
+                ),
+
+                const SizedBox(height: 25),
+
+                // AMOUNT CARD
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 0,
+                    vertical: 0,
+                  ),
+
+                  decoration: BoxDecoration(
+                    color: Colors.orange.shade50,
+
+                  ),
+
+                  child: Row(
+                    mainAxisAlignment:
+                    MainAxisAlignment.spaceBetween,
+                    children: const [
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 30),
+
+                // PAY BUTTON
+                SizedBox(
+                  width: double.infinity,
+                  height: 55,
+
+                  child: ElevatedButton(
+                    onPressed: () {
+                      openPayment();
+                    },
+
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange,
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                        BorderRadius.circular(15),
+                      ),
+                      elevation: 5,
+                    ),
+
+                    child: const Row(
+                      mainAxisAlignment:
+                      MainAxisAlignment.center,
+                      children: [
+
+                        Icon(
+                          Icons.lock,
+                          color: Colors.white,
+                        ),
+
+                        SizedBox(width: 10),
+
+                        Text(
+                          "Pay Now",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

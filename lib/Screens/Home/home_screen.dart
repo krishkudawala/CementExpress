@@ -23,7 +23,6 @@ import 'package:cementexpress/Screens/widgets/items_category.dart';
 
 import 'package:flutter/material.dart';
 
-// ================= HOME SCREEN =================
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -34,15 +33,89 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 
   int currentIndex = 0;
-
   int _selectedIndex = 0;
 
-  List<String> banners = [
+  // ================= BANNERS =================
+  final List<String> banners = [
 
     "assets/images/building.jpg",
     "assets/images/halment.jpg",
     "assets/images/persion.jpg",
     "assets/images/truckut.jpg",
+  ];
+
+  // ================= CATEGORY LIST =================
+  final List<Map<String, dynamic>> categories = [
+
+    {
+      "title": "Building Materials",
+      "image": "construction.png",
+      "page": const BuildingMaterialPage(),
+    },
+
+    {
+      "title": "Tools & Equipment",
+      "image": "support.png",
+      "page": const ToolsEquipmentPage(),
+    },
+
+    {
+      "title": "Interior & Finishing",
+      "image": "plan.png",
+      "page": const InteriorFinishingPage(),
+    },
+
+    {
+      "title": "Services",
+      "image": "hourssupport.png",
+      "page": const ServicesPage(),
+    },
+
+  ];
+
+  // ================= TOP BRANDS =================
+  final List<Map<String, dynamic>> topBrands = [
+
+    {
+      "name": "UltraTech Cement",
+      "price": "₹380",
+      "rating": "4.8",
+      "image": "assets/images/ultratech.jpg",
+      "page": UltraTechPage(),
+    },
+
+    {
+      "name": "ACC Cement",
+      "price": "₹365",
+      "rating": "4.6",
+      "image": "assets/images/acc.jpg",
+      "page": ACCPage(),
+    },
+
+    {
+      "name": "Ambuja Cement",
+      "price": "₹370",
+      "rating": "4.7",
+      "image": "assets/images/ambuja.jpg",
+      "page": AmbujaPage(),
+    },
+
+    {
+      "name": "Shree Cement",
+      "price": "₹375",
+      "rating": "4.7",
+      "image": "assets/images/shree.jpg",
+      "page": ShreeCementPage(),
+    },
+
+    {
+      "name": "J&K Cement",
+      "price": "₹390",
+      "rating": "4.6",
+      "image": "assets/images/jk.jpg",
+      "page": JKCementPage(),
+    },
+
   ];
 
   @override
@@ -71,7 +144,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   CircleAvatar(
                     radius: 35,
-
                     backgroundImage:
                     AssetImage('assets/icons/logo.png'),
                   ),
@@ -90,11 +162,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
-            // HOME
             ListTile(
-
               leading: Icon(Icons.home),
-
               title: Text('Home'),
 
               onTap: () {
@@ -102,11 +171,8 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
 
-            // CONTACT
             ListTile(
-
               leading: Icon(Icons.call),
-
               title: Text('Contact Us'),
 
               onTap: () {
@@ -122,11 +188,8 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
 
-            // FEEDBACK
             ListTile(
-
               leading: Icon(Icons.feedback),
-
               title: Text('Feedback'),
 
               onTap: () {
@@ -142,11 +205,8 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
 
-            // SETTINGS
             ListTile(
-
               leading: Icon(Icons.settings),
-
               title: Text('Settings'),
 
               onTap: () {
@@ -162,7 +222,6 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
 
-            // LOGOUT
             ListTile(
 
               leading: Icon(
@@ -180,27 +239,51 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               onTap: () {
-                showDialog(context: context
-                    , builder: (context) {
-                      return AlertDialog(
-                        title: Text('Logout'),
-                        content: Text('Are you sure you want to logout'),
-                        actions: [
-                          ElevatedButton(onPressed: (){
+
+                showDialog(
+                  context: context,
+
+                  builder: (context) {
+
+                    return AlertDialog(
+
+                      title: Text('Logout'),
+
+                      content: Text(
+                        'Are you sure you want to logout',
+                      ),
+
+                      actions: [
+
+                        ElevatedButton(
+
+                          onPressed: () {
                             Navigator.pop(context);
-                          }
-                              , child: Text('No')
-                          ),
-                          ElevatedButton(onPressed: (){
-                            Navigator.push(context, MaterialPageRoute(builder:(context){
-                              return LoginPage();
-                            }
-                            ));
-                          }
-                              , child: Text('Yes')),
-                        ],
-                      );
-                    }
+                          },
+
+                          child: Text('No'),
+                        ),
+
+                        ElevatedButton(
+
+                          onPressed: () {
+
+                            Navigator.push(
+                              context,
+
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return LoginPage();
+                                },
+                              ),
+                            );
+                          },
+
+                          child: Text('Yes'),
+                        ),
+                      ],
+                    );
+                  },
                 );
               },
             ),
@@ -297,23 +380,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   itemBuilder: (context, index) {
 
-                    return Padding(
-                      padding:
-                      const EdgeInsets.symmetric(
-                        horizontal: 0,
-                      ),
+                    return ClipRRect(
 
-                      child: ClipRRect(
+                      borderRadius:
+                      BorderRadius.circular(5),
 
-                        borderRadius:
-                        BorderRadius.circular(5),
-
-                        child: Image.asset(
-                          banners[index],
-
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                        ),
+                      child: Image.asset(
+                        banners[index],
+                        fit: BoxFit.cover,
+                        width: double.infinity,
                       ),
                     );
                   },
@@ -376,7 +451,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
             child: Row(
               mainAxisAlignment:
-              MainAxisAlignment.spaceBetween,
+              MainAxisAlignment.center,
 
               children: const [
 
@@ -388,15 +463,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-
-                Text(
-                  "Show All",
-
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.blue,
-                  ),
-                ),
               ],
             ),
           ),
@@ -405,105 +471,47 @@ class _HomeScreenState extends State<HomeScreen> {
 
           // ================= CATEGORY LIST =================
           SizedBox(
-            height: 110,
+            height: 120,
 
-            child: ListView(
+            child: ListView.builder(
+
               scrollDirection: Axis.horizontal,
 
-              children: [
+              padding: const EdgeInsets.symmetric(
+                horizontal: 10,
+              ),
 
-                const SizedBox(width: 10),
+              itemCount: categories.length,
 
-                GestureDetector(
+              itemBuilder: (context, index) {
 
-                  onTap: () {
+                final category = categories[index];
 
-                    Navigator.push(
-                      context,
+                return Padding(
+                  padding: const EdgeInsets.only(right: 15),
 
-                      MaterialPageRoute(
-                        builder: (context) =>
-                        const BuildingMaterialPage(),
-                      ),
-                    );
-                  },
+                  child: GestureDetector(
 
-                  child: const ItemsCategory(
-                    title: 'Building Materials',
-                    image: 'construction.png',
-                    color: Colors.grey,
+                    onTap: () {
+
+                      Navigator.push(
+                        context,
+
+                        MaterialPageRoute(
+                          builder: (context) =>
+                          category["page"],
+                        ),
+                      );
+                    },
+
+                    child: ItemsCategory(
+                      title: category["title"],
+                      image: category["image"],
+                      color: Colors.grey,
+                    ),
                   ),
-                ),
-
-                const SizedBox(width: 15),
-
-                GestureDetector(
-
-                  onTap: () {
-
-                    Navigator.push(
-                      context,
-
-                      MaterialPageRoute(
-                        builder: (context) =>
-                        const ToolsEquipmentPage(),
-                      ),
-                    );
-                  },
-
-                  child: const ItemsCategory(
-                    title: 'Tools & Equipment',
-                    image: 'support.png',
-                    color: Colors.grey,
-                  ),
-                ),
-
-                const SizedBox(width: 15),
-
-                GestureDetector(
-
-                  onTap: () {
-
-                    Navigator.push(
-                      context,
-
-                      MaterialPageRoute(
-                        builder: (context) =>
-                        const InteriorFinishingPage(),
-                      ),
-                    );
-                  },
-
-                  child: const ItemsCategory(
-                    title: 'Interior & Finishing',
-                    image: 'plan.png',
-                    color: Colors.grey,
-                  ),
-                ),
-
-                const SizedBox(width: 15),
-
-                GestureDetector(
-
-                  onTap: () {
-
-                    Navigator.push(
-                      context,
-
-                      MaterialPageRoute(
-                        builder: (context) =>
-                        const ServicesPage(),
-                      ),
-                    );
-                  },
-
-                  child: const ItemsCategory(
-                    title: 'Services',
-                    image: 'hourssupport.png',
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
+                );
+              },
             ),
           ),
 
@@ -527,9 +535,9 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(height: 15),
 
           SizedBox(
-            height: 220,
+            height: 240,
 
-            child: ListView(
+            child: ListView.builder(
               scrollDirection: Axis.horizontal,
 
               padding:
@@ -537,51 +545,24 @@ class _HomeScreenState extends State<HomeScreen> {
                 horizontal: 15,
               ),
 
-              children: [
+              itemCount: topBrands.length,
 
-                _buildBrandCard(
-                  "UltraTech Cement",
-                  "₹380",
-                  "4.8",
-                  "assets/images/ultratech.jpg",
-                ),
+              itemBuilder: (context, index) {
 
-                const SizedBox(width: 15),
+                final brand = topBrands[index];
 
-                _buildBrandCard(
-                  "ACC Cement",
-                  "₹365",
-                  "4.6",
-                  "assets/images/acc.jpg",
-                ),
+                return Padding(
+                  padding: const EdgeInsets.only(right: 15),
 
-                const SizedBox(width: 15),
-
-                _buildBrandCard(
-                  "Ambuja Cement",
-                  "₹370",
-                  "4.7",
-                  "assets/images/ambuja.jpg",
-                ),
-
-                const SizedBox(width: 15),
-
-                _buildBrandCard(
-                  "Shree Cement",
-                  "₹375",
-                  "4.7",
-                  "assets/images/shree.jpg",
-                ),
-
-                const SizedBox(width: 15),
-
-                _buildBrandCard(
-                  "J&K Cement",
-                  "₹390",
-                  "4.6",
-                  "assets/images/jk.jpg",
-                ),
-              ],
+                  child: _buildBrandCard(
+                    brand["name"],
+                    brand["price"],
+                    brand["rating"],
+                    brand["image"],
+                    brand["page"],
+                  ),
+                );
+              },
             ),
           ),
 
@@ -600,7 +581,6 @@ class _HomeScreenState extends State<HomeScreen> {
             _selectedIndex = index;
           });
 
-          // ORDERS
           if (index == 1) {
 
             Navigator.push(
@@ -613,7 +593,6 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }
 
-          // CART
           else if (index == 2) {
 
             Navigator.push(
@@ -626,7 +605,6 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }
 
-          // PROFILE
           else if (index == 3) {
 
             Navigator.push(
@@ -667,10 +645,7 @@ class _HomeScreenState extends State<HomeScreen> {
             label: "Cart",
           ),
 
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: "Profile",
-          ),
+
         ],
       ),
     );
@@ -682,76 +657,26 @@ class _HomeScreenState extends State<HomeScreen> {
       String price,
       String rating,
       String image,
+      Widget page,
       ) {
 
     return GestureDetector(
 
       onTap: () {
 
-        if (name == "UltraTech Cement") {
+        Navigator.push(
+          context,
 
-          Navigator.push(
-            context,
-
-            MaterialPageRoute(
-              builder: (context) =>
-                  UltraTechPage(),
-            ),
-          );
-        }
-
-        else if (name == "ACC Cement") {
-
-          Navigator.push(
-            context,
-
-            MaterialPageRoute(
-              builder: (context) =>
-                  ACCPage(),
-            ),
-          );
-        }
-
-        else if (name == "Ambuja Cement") {
-
-          Navigator.push(
-            context,
-
-            MaterialPageRoute(
-              builder: (context) =>
-                  AmbujaPage(),
-            ),
-          );
-        }
-
-        else if (name == "Shree Cement") {
-
-          Navigator.push(
-            context,
-
-            MaterialPageRoute(
-              builder: (context) =>
-                  ShreeCementPage(),
-            ),
-          );
-        }
-
-        else if (name == "J&K Cement") {
-
-          Navigator.push(
-            context,
-
-            MaterialPageRoute(
-              builder: (context) =>
-                  JKCementPage(),
-            ),
-          );
-        }
-
+          MaterialPageRoute(
+            builder: (context) => page,
+          ),
+        );
       },
 
       child: Container(
-        width: 180,
+
+        width:
+        MediaQuery.of(context).size.width * 0.45,
 
         decoration: BoxDecoration(
           color: Colors.white,
@@ -793,7 +718,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 child: Image.asset(
                   image,
-                  fit: BoxFit.contain,
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
@@ -809,6 +734,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   Text(
                     name,
+
+                    maxLines: 1,
+
+                    overflow:
+                    TextOverflow.ellipsis,
 
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
@@ -847,16 +777,22 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     children: [
 
-                      Text(
-                        "$price/bag",
+                      Flexible(
+                        child: Text(
+                          "$price/bag",
 
-                        style: const TextStyle(
-                          color: Colors.deepOrange,
-                          fontWeight: FontWeight.bold,
+                          overflow:
+                          TextOverflow.ellipsis,
+
+                          style: const TextStyle(
+                            color: Colors.deepOrange,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
 
                       Container(
+
                         padding:
                         const EdgeInsets.symmetric(
                           horizontal: 10,
@@ -864,6 +800,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
 
                         decoration: BoxDecoration(
+
                           color:
                           Colors.deepOrange.shade50,
 
@@ -894,6 +831,5 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
-
   }
 }

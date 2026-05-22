@@ -1,3 +1,9 @@
+
+import 'package:cementexpress/Screens/Login/login_page.dart';
+import 'package:cementexpress/Screens/bottomnavigation/orders.dart';
+import 'package:cementexpress/Screens/myprofile/edit_profile.dart';
+import 'package:cementexpress/Screens/payment/payment_screen.dart';
+
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -7,9 +13,11 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Scaffold(
+
       backgroundColor: Colors.grey.shade100,
 
       appBar: AppBar(
+
         backgroundColor: Colors.white,
         elevation: 0,
 
@@ -38,6 +46,7 @@ class ProfilePage extends StatelessWidget {
 
             // ================= PROFILE IMAGE =================
             CircleAvatar(
+
               radius: 55,
 
               backgroundColor:
@@ -77,59 +86,72 @@ class ProfilePage extends StatelessWidget {
             const SizedBox(height: 30),
 
             // ================= PROFILE OPTIONS =================
+
             _buildProfileTile(
+              context,
               Icons.person_outline,
               "Edit Profile",
+              const EditProfilePage(),
             ),
 
             _buildProfileTile(
-              Icons.location_on_outlined,
-              "Saved Address",
-            ),
-
-            _buildProfileTile(
+              context,
               Icons.shopping_bag_outlined,
               "My Orders",
+              const OrdersPage(),
             ),
 
             _buildProfileTile(
+              context,
               Icons.payment_outlined,
               "Payment Methods",
+              const PaymentPage(),
             ),
 
             _buildProfileTile(
+              context,
               Icons.notifications_outlined,
               "Notifications",
+              const NotificationsPage(),
             ),
 
             _buildProfileTile(
+              context,
               Icons.help_outline,
               "Help & Support",
+              const HelpSupportPage(),
             ),
 
             _buildProfileTile(
+              context,
               Icons.info_outline,
               "About App",
+              const AboutAppPage(),
             ),
 
             const SizedBox(height: 30),
 
             // ================= LOGOUT BUTTON =================
             Padding(
+
               padding:
               const EdgeInsets.symmetric(
                 horizontal: 20,
               ),
 
               child: SizedBox(
+
                 width: double.infinity,
                 height: 55,
 
                 child: ElevatedButton.icon(
 
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
+                  },
 
                   style: ElevatedButton.styleFrom(
+
                     backgroundColor: Colors.red,
 
                     shape: RoundedRectangleBorder(
@@ -165,11 +187,14 @@ class ProfilePage extends StatelessWidget {
 
   // ================= PROFILE TILE =================
   Widget _buildProfileTile(
+      BuildContext context,
       IconData icon,
       String title,
+      Widget page,
       ) {
 
     return Container(
+
       margin: const EdgeInsets.symmetric(
         horizontal: 15,
         vertical: 6,
@@ -178,7 +203,8 @@ class ProfilePage extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
 
-        borderRadius: BorderRadius.circular(16),
+        borderRadius:
+        BorderRadius.circular(16),
 
         boxShadow: [
 
@@ -192,6 +218,7 @@ class ProfilePage extends StatelessWidget {
       child: ListTile(
 
         leading: CircleAvatar(
+
           backgroundColor:
           Colors.deepOrange.shade50,
 
@@ -214,7 +241,16 @@ class ProfilePage extends StatelessWidget {
           size: 18,
         ),
 
-        onTap: () {},
+        onTap: () {
+
+          Navigator.push(
+            context,
+
+            MaterialPageRoute(
+              builder: (context) => page,
+            ),
+          );
+        },
       ),
     );
   }

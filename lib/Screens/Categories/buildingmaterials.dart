@@ -188,32 +188,34 @@ class BuildingMaterialPage extends StatelessWidget {
                             const SizedBox(height: 15),
 
                             // BUTTON
-                            SizedBox(
-                              width: double.infinity,
-                              height: 42,
+                            Flexible(
+                              child: SizedBox(
+                                width: double.infinity,
+                                height: 42,
 
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                      context, MaterialPageRoute(
-                                      builder: (context) => PaymentPage()
-                                  ));
-                                },
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context, MaterialPageRoute(
+                                        builder: (context) => PaymentPage()
+                                    ));
+                                  },
 
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.deepOrange,
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.deepOrange,
 
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(12),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                      BorderRadius.circular(12),
+                                    ),
                                   ),
-                                ),
 
-                                child: const Text(
-                                  "Add to Cart",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
+                                  child: const Text(
+                                    "Add to Cart",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                               ),

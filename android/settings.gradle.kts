@@ -1,3 +1,5 @@
+rootProject.name = "cementexpress"
+
 pluginManagement {
     val flutterSdkPath =
         run {

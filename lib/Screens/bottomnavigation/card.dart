@@ -1,3 +1,5 @@
+import 'package:cementexpress/Screens/payment/payment_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class CardPage extends StatelessWidget {
@@ -6,31 +8,18 @@ class CardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    List<Map<String, dynamic>> cartItems = [
-
-      {
-        "name": "UltraTech Cement",
-        "price": "₹420",
-        "quantity": "2 Bags",
-      },
-
-      {
-        "name": "ACC Cement",
-        "price": "₹390",
-        "quantity": "1 Bag",
-      },
-
-      {
-        "name": "Ambuja Cement",
-        "price": "₹410",
-        "quantity": "3 Bags",
-      },
-    ];
+    // ================= FIREBASE COLLECTION =================
+    final CollectionReference cart =
+    FirebaseFirestore.instance.collection(
+      'cartItems',
+    );
 
     return Scaffold(
+
       backgroundColor: Colors.grey.shade100,
 
       appBar: AppBar(
+
         backgroundColor: Colors.white,
         elevation: 0,
 
@@ -55,119 +44,199 @@ class CardPage extends StatelessWidget {
 
           // ================= CART ITEMS =================
           Expanded(
-            child: ListView.builder(
 
-              padding: const EdgeInsets.all(15),
+            child: StreamBuilder<QuerySnapshot>(
 
-              itemCount: cartItems.length,
+              stream: cart.snapshots(),
 
-              itemBuilder: (context, index) {
+              builder: (context, snapshot) {
 
-                final item = cartItems[index];
+                // LOADING
+                if (snapshot.connectionState ==
+                    ConnectionState.waiting) {
 
-                return Container(
-                  margin:
-                  const EdgeInsets.only(bottom: 15),
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
 
-                  padding: const EdgeInsets.all(15),
+                // EMPTY CART
+                if (!snapshot.hasData ||
+                    snapshot.data!.docs.isEmpty) {
 
-                  decoration: BoxDecoration(
-                    color: Colors.white,
+                  return const Center(
 
-                    borderRadius:
-                    BorderRadius.circular(18),
+                    child: Text(
 
-                    boxShadow: [
+                      "Cart is Empty",
 
-                      BoxShadow(
-                        color: Colors.grey.shade200,
-                        blurRadius: 8,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       ),
-                    ],
-                  ),
+                    ),
+                  );
+                }
 
-                  child: Row(
-                    children: [
+                // FIREBASE DATA
+                final cartItems =
+                    snapshot.data!.docs;
 
-                      // IMAGE
-                      Container(
-                        height: 80,
-                        width: 80,
+                return ListView.builder(
 
-                        decoration: BoxDecoration(
-                          color:
-                          Colors.orange.shade50,
+                  padding:
+                  const EdgeInsets.all(15),
 
-                          borderRadius:
-                          BorderRadius.circular(15),
+                  itemCount: cartItems.length,
+
+                  itemBuilder: (context, index) {
+
+                    final item =
+                    cartItems[index];
+
+                    return Container(
+
+                      margin:
+                      const EdgeInsets.only(
+                        bottom: 15,
+                      ),
+
+                      padding:
+                      const EdgeInsets.all(15),
+
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+
+                        borderRadius:
+                        BorderRadius.circular(
+                          18,
                         ),
 
-                        child: const Icon(
-                          Icons.inventory_2,
-                          size: 40,
-                          color: Colors.deepOrange,
-                        ),
+                        boxShadow: [
+
+                          BoxShadow(
+                            color:
+                            Colors.grey.shade200,
+                            blurRadius: 8,
+                          ),
+                        ],
                       ),
 
-                      const SizedBox(width: 15),
+                      child: Row(
+                        children: [
 
-                      // DETAILS
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment:
-                          CrossAxisAlignment.start,
+                          // ================= IMAGE =================
+                          Container(
 
-                          children: [
+                            height: 80,
+                            width: 80,
 
-                            Text(
-                              item['name'],
+                            decoration:
+                            BoxDecoration(
 
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight:
-                                FontWeight.bold,
+                              color:
+                              Colors.orange
+                                  .shade50,
+
+                              borderRadius:
+                              BorderRadius
+                                  .circular(
+                                15,
                               ),
                             ),
 
-                            const SizedBox(height: 8),
-
-                            Text(
-                              item['quantity'],
-
-                              style: TextStyle(
-                                color:
-                                Colors.grey.shade700,
-                              ),
+                            child: const Icon(
+                              Icons.inventory_2,
+                              size: 40,
+                              color:
+                              Colors.deepOrange,
                             ),
+                          ),
 
-                            const SizedBox(height: 8),
+                          const SizedBox(width: 15),
 
-                            Text(
-                              item['price'],
+                          // ================= DETAILS =================
+                          Expanded(
 
-                              style: const TextStyle(
-                                color:
-                                Colors.deepOrange,
-                                fontWeight:
-                                FontWeight.bold,
-                                fontSize: 16,
-                              ),
+                            child: Column(
+                              crossAxisAlignment:
+                              CrossAxisAlignment
+                                  .start,
+
+                              children: [
+
+                                Text(
+                                  item['name'],
+
+                                  style:
+                                  const TextStyle(
+                                    fontSize:
+                                    18,
+
+                                    fontWeight:
+                                    FontWeight
+                                        .bold,
+                                  ),
+                                ),
+
+                                const SizedBox(
+                                  height: 8,
+                                ),
+
+                                Text(
+                                  item['quantity'],
+
+                                  style:
+                                  TextStyle(
+                                    color: Colors
+                                        .grey
+                                        .shade700,
+                                  ),
+                                ),
+
+                                const SizedBox(
+                                  height: 8,
+                                ),
+
+                                Text(
+                                  item['price'],
+
+                                  style:
+                                  const TextStyle(
+                                    color: Colors
+                                        .deepOrange,
+
+                                    fontWeight:
+                                    FontWeight
+                                        .bold,
+
+                                    fontSize:
+                                    16,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
+                          ),
 
-                      // DELETE BUTTON
-                      IconButton(
-                        onPressed: () {},
+                          // ================= DELETE =================
+                          IconButton(
 
-                        icon: const Icon(
-                          Icons.delete,
-                          color: Colors.red,
-                        ),
+                            onPressed: () async {
+
+                              await cart
+                                  .doc(item.id)
+                                  .delete();
+                            },
+
+                            icon: const Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    );
+                  },
                 );
               },
             ),
@@ -175,6 +244,7 @@ class CardPage extends StatelessWidget {
 
           // ================= TOTAL SECTION =================
           Container(
+
             padding: const EdgeInsets.all(20),
 
             decoration: const BoxDecoration(
@@ -200,7 +270,8 @@ class CardPage extends StatelessWidget {
 
                       style: TextStyle(
                         fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                        fontWeight:
+                        FontWeight.bold,
                       ),
                     ),
 
@@ -210,7 +281,8 @@ class CardPage extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 20,
                         color: Colors.deepOrange,
-                        fontWeight: FontWeight.bold,
+                        fontWeight:
+                        FontWeight.bold,
                       ),
                     ),
                   ],
@@ -219,20 +291,36 @@ class CardPage extends StatelessWidget {
                 const SizedBox(height: 20),
 
                 SizedBox(
+
                   width: double.infinity,
                   height: 55,
 
                   child: ElevatedButton(
 
-                    onPressed: () {},
+                    onPressed: () {
 
-                    style: ElevatedButton.styleFrom(
+                      Navigator.push(
+                        context,
+
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              PaymentPage(),
+                        ),
+                      );
+                    },
+
+                    style:
+                    ElevatedButton.styleFrom(
+
                       backgroundColor:
                       Colors.deepOrange,
 
-                      shape: RoundedRectangleBorder(
+                      shape:
+                      RoundedRectangleBorder(
                         borderRadius:
-                        BorderRadius.circular(15),
+                        BorderRadius.circular(
+                          15,
+                        ),
                       ),
                     ),
 
@@ -242,7 +330,8 @@ class CardPage extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 18,
                         color: Colors.white,
-                        fontWeight: FontWeight.bold,
+                        fontWeight:
+                        FontWeight.bold,
                       ),
                     ),
                   ),
@@ -251,6 +340,109 @@ class CardPage extends StatelessWidget {
             ),
           ),
         ],
+      ),
+
+      // ================= ADD MULTIPLE PRODUCTS =================
+      floatingActionButton:
+      FloatingActionButton(
+
+        backgroundColor:
+        Colors.deepOrange,
+
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+
+        onPressed: () async {
+
+          // PRODUCT LIST
+          List<Map<String, dynamic>>
+          products = [
+
+            {
+              "name":
+              "UltraTech Cement",
+
+              "price":
+              "₹420",
+
+              "quantity":
+              "1 Bag",
+            },
+
+            {
+              "name":
+              "ACC Cement",
+
+              "price":
+              "₹390",
+
+              "quantity":
+              "2 Bags",
+            },
+
+            {
+              "name":
+              "Ambuja Cement",
+
+              "price":
+              "₹410",
+
+              "quantity":
+              "3 Bags",
+            },
+
+            {
+              "name":
+              "Shree Cement",
+
+              "price":
+              "₹430",
+
+              "quantity":
+              "1 Bag",
+            },
+
+            {
+              "name":
+              "J&K Cement",
+
+              "price":
+              "₹400",
+
+              "quantity":
+              "2 Bags",
+            },
+          ];
+
+          // ================= ADD ALL PRODUCTS =================
+          for (var product in products) {
+
+            await cart.add({
+
+              "name":
+              product["name"],
+
+              "price":
+              product["price"],
+
+              "quantity":
+              product["quantity"],
+            });
+          }
+
+          // SUCCESS MESSAGE
+          ScaffoldMessenger.of(context)
+              .showSnackBar(
+
+            const SnackBar(
+              content: Text(
+                "Products Added Successfully",
+              ),
+            ),
+          );
+        },
       ),
     );
   }

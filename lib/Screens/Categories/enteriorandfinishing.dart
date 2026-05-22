@@ -52,9 +52,11 @@ class InteriorFinishingPage extends StatelessWidget {
     ];
 
     return Scaffold(
+
       backgroundColor: Colors.grey.shade100,
 
       appBar: AppBar(
+
         backgroundColor: Colors.white,
         elevation: 0,
 
@@ -62,6 +64,7 @@ class InteriorFinishingPage extends StatelessWidget {
 
         title: const Text(
           "Interior & Finishing",
+
           style: TextStyle(
             color: Colors.black87,
             fontWeight: FontWeight.bold,
@@ -76,18 +79,24 @@ class InteriorFinishingPage extends StatelessWidget {
       body: SingleChildScrollView(
 
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment:
+          CrossAxisAlignment.start,
+
           children: [
 
-            // TOP BANNER
+            // ================= TOP BANNER =================
             Container(
+
               margin: const EdgeInsets.all(16),
               height: 200,
 
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(22),
+
+                borderRadius:
+                BorderRadius.circular(22),
 
                 image: const DecorationImage(
+
                   image: NetworkImage(
                     "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85",
                   ),
@@ -97,14 +106,22 @@ class InteriorFinishingPage extends StatelessWidget {
               ),
 
               child: Container(
+
                 padding: const EdgeInsets.all(20),
 
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(22),
+
+                  borderRadius:
+                  BorderRadius.circular(22),
 
                   gradient: LinearGradient(
+
                     colors: [
-                      Colors.black.withOpacity(0.7),
+
+                      Colors.black.withOpacity(
+                        0.7,
+                      ),
+
                       Colors.transparent,
                     ],
 
@@ -114,144 +131,239 @@ class InteriorFinishingPage extends StatelessWidget {
                 ),
 
                 child: const Align(
-                  alignment: Alignment.bottomLeft,
+
+                  alignment:
+                  Alignment.bottomLeft,
 
                   child: Text(
                     "Beautiful Interior Solutions",
+
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 28,
-                      fontWeight: FontWeight.bold,
+                      fontWeight:
+                      FontWeight.bold,
                     ),
                   ),
                 ),
               ),
             ),
 
+            // ================= TITLE =================
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 18),
+
+              padding:
+              EdgeInsets.symmetric(
+                horizontal: 18,
+              ),
 
               child: Text(
                 "Interior Services",
+
                 style: TextStyle(
                   fontSize: 22,
-                  fontWeight: FontWeight.bold,
+                  fontWeight:
+                  FontWeight.bold,
                 ),
               ),
             ),
 
             const SizedBox(height: 15),
 
-            // GRID
+            // ================= GRID =================
             GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
 
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              shrinkWrap: true,
+
+              physics:
+              const NeverScrollableScrollPhysics(),
+
+              padding:
+              const EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
 
               itemCount: interiors.length,
 
               gridDelegate:
-              const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
+              SliverGridDelegateWithFixedCrossAxisCount(
+
+                crossAxisCount:
+                MediaQuery.of(context)
+                    .size
+                    .width <
+                    600
+                    ? 2
+                    : 3,
 
                 crossAxisSpacing: 15,
                 mainAxisSpacing: 15,
 
-                childAspectRatio: 0.92,
+                childAspectRatio:
+                MediaQuery.of(context)
+                    .size
+                    .width <
+                    600
+                    ? 0.72
+                    : 0.90,
               ),
 
               itemBuilder: (context, index) {
 
-                final item = interiors[index];
+                final item =
+                interiors[index];
 
                 return Container(
 
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
+
+                    borderRadius:
+                    BorderRadius.circular(
+                      20,
+                    ),
 
                     boxShadow: [
+
                       BoxShadow(
-                        color: Colors.grey.shade200,
+                        color:
+                        Colors.grey.shade200,
+
                         blurRadius: 6,
-                        offset: const Offset(0, 3),
+
+                        offset:
+                        const Offset(0, 3),
                       ),
                     ],
                   ),
 
                   child: Padding(
-                    padding: const EdgeInsets.all(16),
+                    padding:
+                    const EdgeInsets.all(
+                      16,
+                    ),
 
                     child: Column(
+
                       crossAxisAlignment:
                       CrossAxisAlignment.start,
+
                       mainAxisAlignment:
-                      MainAxisAlignment.spaceBetween,
+                      MainAxisAlignment
+                          .spaceBetween,
 
                       children: [
 
+                        // ================= ICON =================
                         CircleAvatar(
+
                           radius: 28,
 
                           backgroundColor:
-                          item['color'].withOpacity(0.15),
+                          item['color']
+                              .withOpacity(
+                            0.15,
+                          ),
 
                           child: Icon(
                             item['icon'],
-                            color: item['color'],
+
+                            color:
+                            item['color'],
+
                             size: 30,
                           ),
                         ),
 
+                        // ================= TEXT =================
                         Column(
+
                           crossAxisAlignment:
-                          CrossAxisAlignment.start,
+                          CrossAxisAlignment
+                              .start,
+
                           children: [
 
                             Text(
                               item['title'],
 
-                              style: const TextStyle(
+                              maxLines: 1,
+
+                              overflow:
+                              TextOverflow
+                                  .ellipsis,
+
+                              style:
+                              const TextStyle(
                                 fontSize: 17,
-                                fontWeight: FontWeight.bold,
+
+                                fontWeight:
+                                FontWeight
+                                    .bold,
                               ),
                             ),
 
-                            const SizedBox(height: 6),
+                            const SizedBox(
+                              height: 6,
+                            ),
 
                             Text(
                               item['subtitle'],
 
-                              style: TextStyle(
-                                color: Colors.grey.shade600,
+                              maxLines: 2,
+
+                              overflow:
+                              TextOverflow
+                                  .ellipsis,
+
+                              style:
+                              TextStyle(
+                                color: Colors
+                                    .grey
+                                    .shade600,
+
                                 fontSize: 13,
                               ),
                             ),
                           ],
                         ),
 
+                        // ================= BUTTON =================
                         SizedBox(
+
                           width: double.infinity,
                           height: 40,
 
                           child: ElevatedButton(
+
                             onPressed: () {},
 
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: item['color'],
+                            style:
+                            ElevatedButton
+                                .styleFrom(
 
-                              shape: RoundedRectangleBorder(
+                              backgroundColor:
+                              item['color'],
+
+                              shape:
+                              RoundedRectangleBorder(
+
                                 borderRadius:
-                                BorderRadius.circular(12),
+                                BorderRadius.circular(
+                                  12,
+                                ),
                               ),
                             ),
 
                             child: const Text(
                               "Explore",
+
                               style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
+                                color:
+                                Colors.white,
+
+                                fontWeight:
+                                FontWeight.bold,
                               ),
                             ),
                           ),

@@ -4,6 +4,7 @@ import 'package:cementexpress/Screens/Login/login_page.dart';
 import 'package:cementexpress/Screens/bottomnavigation/orders.dart';
 import 'package:cementexpress/Screens/bottomnavigation/profile.dart';
 import 'package:cementexpress/Screens/forget/forget_password.dart';
+import 'package:cementexpress/Screens/payment/payment_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -215,7 +216,12 @@ class _SettingsPageState extends State<SettingsPage> {
                 color: textColor,
               ),
 
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder:
+                    (context) => PaymentPage()
+                ));
+              },
             ),
 
             buildTile(
