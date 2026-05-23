@@ -1,47 +1,90 @@
 import 'package:cementexpress/Screens/payment/payment_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class AmbujaPage extends StatelessWidget {
+class AmbujaPage extends StatefulWidget {
   const AmbujaPage({super.key});
+
+  @override
+  State<AmbujaPage> createState() => _AmbujaPageState();
+}
+
+class _AmbujaPageState extends State<AmbujaPage> {
+
+  int totalPrice = 0;
+  final dbreference =FirebaseFirestore.instance.collection('orders');
+
+
+  final List<Map<String, dynamic>> products = [
+
+    {
+      "name": "Ambuja OPC 53 Grade",
+      "price": 415,
+      "image":
+      "https://images.unsplash.com/photo-1599707254554-027aeb4deacd?w=500",
+      "quantity": 0,
+    },
+
+    {
+      "name": "Ambuja PPC Cement",
+      "price": 390,
+      "image":
+      "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=500",
+      "quantity": 0,
+    },
+
+    {
+      "name": "Ambuja Cool Walls",
+      "price": 440,
+      "image":
+      "https://images.unsplash.com/photo-1519999482648-25049ddd37b1?w=500",
+      "quantity": 0,
+    },
+
+    {
+      "name": "Ambuja Plus Roof Special",
+      "price": 450,
+      "image":
+      "https://images.unsplash.com/photo-1509395176047-4a66953fd231?w=500",
+      "quantity": 0,
+    },
+  ];
+
+  void calculateTotal() {
+
+    totalPrice = 0;
+
+    for (var item in products) {
+
+      int price =
+          int.tryParse(item['price'].toString()) ?? 0;
+
+      int quantity =
+          int.tryParse(item['quantity'].toString()) ?? 0;
+
+      totalPrice += price * quantity;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
 
-    List<Map<String, dynamic>> products = [
+    int cartCount = 0;
 
-      {
-        "name": "Ambuja OPC 53 Grade",
-        "price": "₹415 / bag",
-        "image":
-        "https://images.unsplash.com/photo-1599707254554-027aeb4deacd",
-      },
+    for (var item in products) {
 
-      {
-        "name": "Ambuja PPC Cement",
-        "price": "₹390 / bag",
-        "image":
-        "https://images.unsplash.com/photo-1504307651254-35680f356dfd",
-      },
-
-      {
-        "name": "Ambuja Cool Walls",
-        "price": "₹440 / bag",
-        "image":
-        "https://images.unsplash.com/photo-1519999482648-25049ddd37b1",
-      },
-
-      {
-        "name": "Ambuja Plus Roof Special",
-        "price": "₹450 / bag",
-        "image":
-        "https://images.unsplash.com/photo-1509395176047-4a66953fd231",
-      },
-    ];
+      cartCount +=
+          int.tryParse(
+            item['quantity'].toString(),
+          ) ?? 0;
+    }
 
     return Scaffold(
+
       backgroundColor: Colors.grey.shade100,
 
       appBar: AppBar(
+
         backgroundColor: Colors.white,
         elevation: 0,
 
@@ -49,6 +92,7 @@ class AmbujaPage extends StatelessWidget {
 
         title: const Text(
           "Ambuja Cement",
+
           style: TextStyle(
             color: Colors.black87,
             fontWeight: FontWeight.bold,
@@ -65,15 +109,18 @@ class AmbujaPage extends StatelessWidget {
 
           // TOP BANNER
           Container(
+
             margin: const EdgeInsets.all(16),
             height: 180,
 
             decoration: BoxDecoration(
+
               borderRadius: BorderRadius.circular(22),
 
               image: const DecorationImage(
+
                 image: NetworkImage(
-                  "https://images.unsplash.com/photo-1504307651254-35680f356dfd",
+                  "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=500",
                 ),
 
                 fit: BoxFit.cover,
@@ -81,14 +128,17 @@ class AmbujaPage extends StatelessWidget {
             ),
 
             child: Container(
+
               padding: const EdgeInsets.all(20),
 
               decoration: BoxDecoration(
+
                 borderRadius: BorderRadius.circular(22),
 
-                gradient: LinearGradient(
+                gradient: const LinearGradient(
+
                   colors: [
-                    Colors.black.withOpacity(0.7),
+                    Colors.black54,
                     Colors.transparent,
                   ],
 
@@ -98,6 +148,7 @@ class AmbujaPage extends StatelessWidget {
               ),
 
               child: const Align(
+
                 alignment: Alignment.bottomLeft,
 
                 child: Text(
@@ -115,7 +166,9 @@ class AmbujaPage extends StatelessWidget {
 
           // SEARCH BAR
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+
+            padding:
+            const EdgeInsets.symmetric(horizontal: 16),
 
             child: TextField(
 
@@ -129,7 +182,10 @@ class AmbujaPage extends StatelessWidget {
                 fillColor: Colors.white,
 
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
+
+                  borderRadius:
+                  BorderRadius.circular(14),
+
                   borderSide: BorderSide.none,
                 ),
               ),
@@ -138,16 +194,78 @@ class AmbujaPage extends StatelessWidget {
 
           const SizedBox(height: 15),
 
+          // TOTAL PRICE
+          Padding(
+
+            padding:
+            const EdgeInsets.symmetric(horizontal: 16),
+
+            child: Container(
+
+              padding: const EdgeInsets.all(14),
+
+              decoration: BoxDecoration(
+
+                color: Colors.white,
+
+                borderRadius:
+                BorderRadius.circular(14),
+
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.shade300,
+                    blurRadius: 5,
+                  ),
+                ],
+              ),
+
+              child: Row(
+
+                mainAxisAlignment:
+                MainAxisAlignment.spaceBetween,
+
+                children: [
+
+                  const Text(
+
+                    "Total Amount",
+
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  Text(
+
+                    "₹$totalPrice",
+
+                    style: const TextStyle(
+                      color: Colors.green,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 15),
+
           // PRODUCT GRID
           Expanded(
+
             child: GridView.builder(
 
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding:
+              const EdgeInsets.symmetric(horizontal: 16),
 
               itemCount: products.length,
 
               gridDelegate:
               const SliverGridDelegateWithFixedCrossAxisCount(
+
                 crossAxisCount: 2,
 
                 crossAxisSpacing: 15,
@@ -163,10 +281,14 @@ class AmbujaPage extends StatelessWidget {
                 return Container(
 
                   decoration: BoxDecoration(
+
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
+
+                    borderRadius:
+                    BorderRadius.circular(20),
 
                     boxShadow: [
+
                       BoxShadow(
                         color: Colors.grey.shade200,
                         blurRadius: 6,
@@ -176,23 +298,27 @@ class AmbujaPage extends StatelessWidget {
                   ),
 
                   child: Column(
+
                     crossAxisAlignment:
                     CrossAxisAlignment.start,
 
                     children: [
 
                       // IMAGE
-                      Flexible(
+                      Expanded(
+
                         child: ClipRRect(
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            topRight: Radius.circular(10),
+
+                          borderRadius:
+                          const BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20),
                           ),
 
                           child: Image.network(
-                            item['image'],
 
-                            height: 130,
+                            item['image'].toString(),
+
                             width: double.infinity,
 
                             fit: BoxFit.cover,
@@ -201,9 +327,11 @@ class AmbujaPage extends StatelessWidget {
                       ),
 
                       Padding(
+
                         padding: const EdgeInsets.all(12),
 
                         child: Column(
+
                           crossAxisAlignment:
                           CrossAxisAlignment.start,
 
@@ -211,10 +339,13 @@ class AmbujaPage extends StatelessWidget {
 
                             // NAME
                             Text(
-                              item['name'],
+
+                              item['name'].toString(),
+
+                              maxLines: 2,
 
                               style: const TextStyle(
-                                fontSize: 16,
+                                fontSize: 15,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -223,48 +354,102 @@ class AmbujaPage extends StatelessWidget {
 
                             // PRICE
                             Text(
-                              item['price'],
+
+                              "₹${item['price']} / bag",
 
                               style: TextStyle(
                                 color: Colors.grey.shade700,
-                                fontSize: 15,
+                                fontSize: 14,
                               ),
                             ),
 
-                            const SizedBox(height: 15),
+                            const SizedBox(height: 12),
 
-                            // BUTTON
-                            SizedBox(
-                              width: double.infinity,
-                              height: 42,
+                            // QUANTITY BUTTONS
+                            Row(
 
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                      context, MaterialPageRoute(
-                                      builder: (context) => PaymentPage()
-                                  ));
-                                },
+                              mainAxisAlignment:
+                              MainAxisAlignment.spaceBetween,
 
-                                style: ElevatedButton.styleFrom(
+                              children: [
+
+                                // REMOVE
+                                CircleAvatar(
+
+                                  radius: 16,
+
                                   backgroundColor:
-                                  Colors.deepOrange,
+                                  Colors.red.shade100,
 
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(12),
+                                  child: IconButton(
+
+                                    padding: EdgeInsets.zero,
+
+                                    icon: const Icon(
+                                      Icons.remove,
+                                      size: 18,
+                                      color: Colors.red,
+                                    ),
+
+                                    onPressed: () {
+
+                                      if ((item['quantity'] ?? 0) > 0) {
+
+                                        setState(() {
+
+                                          item['quantity'] =
+                                              (item['quantity'] ?? 0) - 1;
+
+                                          calculateTotal();
+                                        });
+                                      }
+                                    },
                                   ),
                                 ),
 
-                                child: const Text(
-                                  "Add to Cart",
+                                // QUANTITY
+                                Text(
 
-                                  style: TextStyle(
-                                    color: Colors.white,
+                                  (item['quantity'] ?? 0)
+                                      .toString(),
+
+                                  style: const TextStyle(
+                                    fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                              ),
+
+                                // ADD
+                                CircleAvatar(
+
+                                  radius: 16,
+
+                                  backgroundColor:
+                                  Colors.green.shade100,
+
+                                  child: IconButton(
+
+                                    padding: EdgeInsets.zero,
+
+                                    icon: const Icon(
+                                      Icons.add,
+                                      size: 18,
+                                      color: Colors.green,
+                                    ),
+
+                                    onPressed: () {
+
+                                      setState(() {
+
+                                        item['quantity'] =
+                                            (item['quantity'] ?? 0) + 1;
+
+                                        calculateTotal();
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -276,6 +461,124 @@ class AmbujaPage extends StatelessWidget {
             ),
           ),
         ],
+      ),
+
+      floatingActionButton: SizedBox(
+
+        width: 180,
+        height: 60,
+
+        child: FloatingActionButton.extended(
+
+          backgroundColor:
+          Colors.green,
+
+          onPressed: () async {
+
+            if (cartCount == 0) {
+
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(
+
+                const SnackBar(
+                  content:
+                  Text("Cart is Empty"),
+                ),
+              );
+
+              return;
+            }
+
+            // STORE DATA IN FIRESTORE
+            for (var item in products) {
+
+              if ((item['quantity'] ?? 0) > 0) {
+
+                await dbreference.add({
+
+                  'brand':
+                  'Ambuja',
+
+                  'product':
+                  item['name'],
+
+                  'price':
+                  item['price'],
+
+                  'quantity':
+                  item['quantity'],
+
+                  'total':
+                  item['price'] *
+                      item['quantity'],
+
+                  'status':
+                  'Processing',
+
+                  'date':
+                  DateTime.now()
+                      .toString(),
+                });
+              }
+            }
+
+            ScaffoldMessenger.of(context)
+                .showSnackBar(
+
+              const SnackBar(
+                content:
+                Text(
+                  "Order Placed Successfully",
+                ),
+              ),
+            );
+
+            Navigator.push(
+
+              context,
+
+              MaterialPageRoute(
+                builder: (context) =>
+                const PaymentPage(),
+              ),
+            );
+          },
+
+          icon: const Icon(
+            Icons.shopping_cart,
+            color: Colors.white,
+          ),
+
+          label: Column(
+
+            mainAxisAlignment:
+            MainAxisAlignment.center,
+
+            children: [
+
+              Text(
+
+                "Cart ($cartCount)",
+
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight:
+                  FontWeight.bold,
+                ),
+              ),
+
+              Text(
+
+                "₹$totalPrice",
+
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

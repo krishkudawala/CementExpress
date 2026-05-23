@@ -593,19 +593,19 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }
 
+        //  else if (index == 2) {
+            //
+            // Navigator.push(
+            //   context,
+            //
+            //   MaterialPageRoute(
+            //     builder: (context) =>
+            //     const CardPage(),
+            //   ),
+            // );
+         // }
+
           else if (index == 2) {
-
-            Navigator.push(
-              context,
-
-              MaterialPageRoute(
-                builder: (context) =>
-                const CardPage(),
-              ),
-            );
-          }
-
-          else if (index == 3) {
 
             Navigator.push(
               context,
@@ -640,10 +640,10 @@ class _HomeScreenState extends State<HomeScreen> {
             label: "Orders",
           ),
 
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: "Cart",
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.shopping_cart),
+          //   label: "Cart",
+          // ),
 
 
         ],

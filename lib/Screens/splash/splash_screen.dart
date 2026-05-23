@@ -101,7 +101,7 @@ class _SplashScreenState
 
     return Scaffold(
 
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey,
 
       body: Center(
 
