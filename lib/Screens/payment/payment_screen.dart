@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
@@ -5,14 +7,18 @@ class PaymentPage extends StatefulWidget {
   const PaymentPage({super.key});
 
   @override
-  State<PaymentPage> createState() => _PaymentPageState();
+  State<PaymentPage> createState() =>
+      _PaymentPageState();
 }
 
-class _PaymentPageState extends State<PaymentPage> {
+class _PaymentPageState
+    extends State<PaymentPage> {
+
   late Razorpay razorpay;
 
   @override
   void initState() {
+
     super.initState();
 
     razorpay = Razorpay();
@@ -38,20 +44,29 @@ class _PaymentPageState extends State<PaymentPage> {
 
   // OPEN PAYMENT
   void openPayment() {
+
+    User? user =
+        FirebaseAuth.instance.currentUser;
+
     var options = {
+
       // TEST KEY
-      'key': 'rzp_test_SsMf2KMfJMATzw',
+      'key':
+      'rzp_test_SsMf2KMfJMATzw',
 
       // AMOUNT IN PAISE
       'amount': 4500 * 100,
 
       'name': 'Cement Express',
 
-      'description': 'Payment For Cement Order',
+      'description':
+      'Payment For Cement Order',
 
       'prefill': {
+
         'contact': '9876543210',
-        'email': 'test@gmail.com',
+
+        'email': user?.email,
       },
 
       'theme': {
@@ -64,34 +79,108 @@ class _PaymentPageState extends State<PaymentPage> {
     };
 
     try {
+
       razorpay.open(options);
+
     } catch (e) {
+
       debugPrint(e.toString());
     }
   }
 
   // PAYMENT SUCCESS
   void handlePaymentSuccess(
-      PaymentSuccessResponse response) {
-    ScaffoldMessenger.of(context).showSnackBar(
+      PaymentSuccessResponse response)
+  async {
+
+    User? user =
+        FirebaseAuth.instance.currentUser;
+
+    // SAVE PAYMENT
+    await FirebaseFirestore.instance
+        .collection("payments")
+        .doc(response.paymentId)
+        .set({
+
+      "uid": user?.uid,
+
+      "email": user?.email,
+
+
+      "paymentId":
+      response.paymentId,
+
+      "orderId":
+      response.orderId,
+
+
+
+      "status":
+      "Success",
+
+      "createdAt":
+      FieldValue.serverTimestamp(),
+    });
+
+    ScaffoldMessenger.of(context)
+        .showSnackBar(
+
       const SnackBar(
+
         content: Text(
           "Payment Successful",
         ),
-        backgroundColor: Colors.green,
+
+        backgroundColor:
+        Colors.green,
       ),
     );
   }
 
   // PAYMENT ERROR
   void handlePaymentError(
-      PaymentFailureResponse response) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
+      PaymentFailureResponse response)
+  async {
+
+    User? user =
+        FirebaseAuth.instance.currentUser;
+
+    // SAVE FAILED PAYMENT
+    await FirebaseFirestore.instance
+        .collection("payments")
+        .add({
+
+      "uid": user?.uid,
+
+
+      "email": user?.email,
+
+
+      "code": response.code,
+
+      "message":
+      response.message,
+
+      "status":
+      "Failed",
+
+      "createdAt":
+      FieldValue.serverTimestamp(),
+    });
+
+    ScaffoldMessenger.of(context)
+        .showSnackBar(
+
+      SnackBar(
+
         content: Text(
-          "Payment Failed",
+
+          response.message ??
+              "Payment Failed",
         ),
-        backgroundColor: Colors.red,
+
+        backgroundColor:
+        Colors.red,
       ),
     );
   }
@@ -99,10 +188,16 @@ class _PaymentPageState extends State<PaymentPage> {
   // EXTERNAL WALLET
   void handleExternalWallet(
       ExternalWalletResponse response) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
+
+    ScaffoldMessenger.of(context)
+        .showSnackBar(
+
+      SnackBar(
+
         content: Text(
-          "External Wallet Selected",
+
+          "External Wallet Selected: "
+              "${response.walletName}",
         ),
       ),
     );
@@ -110,65 +205,107 @@ class _PaymentPageState extends State<PaymentPage> {
 
   @override
   void dispose() {
+
     razorpay.clear();
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
-      backgroundColor: const Color(0xffF5F5F5),
+
+      backgroundColor:
+      const Color(0xffF5F5F5),
 
       appBar: AppBar(
+
         elevation: 0,
-        backgroundColor: Colors.orange,
+
+        backgroundColor:
+        Colors.orange,
+
         centerTitle: true,
+
         title: const Text(
+
           "Secure Payment",
+
           style: TextStyle(
+
             color: Colors.white,
-            fontWeight: FontWeight.bold,
+
+            fontWeight:
+            FontWeight.bold,
           ),
         ),
       ),
 
       body: Center(
+
         child: Padding(
-          padding: const EdgeInsets.all(20),
+
+          padding:
+          const EdgeInsets.all(20),
 
           child: Container(
-            padding: const EdgeInsets.all(20),
+
+            padding:
+            const EdgeInsets.all(20),
 
             decoration: BoxDecoration(
+
               color: Colors.white,
-              borderRadius: BorderRadius.circular(25),
+
+              borderRadius:
+              BorderRadius.circular(25),
+
               boxShadow: [
+
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
+
+                  color: Colors.grey
+                      .withOpacity(0.2),
+
                   blurRadius: 10,
+
                   spreadRadius: 2,
-                  offset: const Offset(0, 5),
+
+                  offset:
+                  const Offset(0, 5),
                 ),
               ],
             ),
 
             child: Column(
-              mainAxisSize: MainAxisSize.min,
+
+              mainAxisSize:
+              MainAxisSize.min,
+
               children: [
 
                 // ICON
                 Container(
+
                   height: 100,
                   width: 100,
 
                   decoration: BoxDecoration(
-                    color: Colors.orange.shade100,
-                    shape: BoxShape.circle,
+
+                    color:
+                    Colors.orange.shade100,
+
+                    shape:
+                    BoxShape.circle,
                   ),
 
                   child: const Icon(
+
                     Icons.account_balance_wallet,
+
                     size: 55,
+
                     color: Colors.orange,
                   ),
                 ),
@@ -177,10 +314,15 @@ class _PaymentPageState extends State<PaymentPage> {
 
                 // TITLE
                 const Text(
+
                   "Cement Express",
+
                   style: TextStyle(
+
                     fontSize: 28,
-                    fontWeight: FontWeight.bold,
+
+                    fontWeight:
+                    FontWeight.bold,
                   ),
                 ),
 
@@ -188,32 +330,46 @@ class _PaymentPageState extends State<PaymentPage> {
 
                 // DESCRIPTION
                 const Text(
+
                   "Complete your payment securely using Razorpay",
+
                   textAlign: TextAlign.center,
+
                   style: TextStyle(
+
                     fontSize: 16,
+
                     color: Colors.grey,
                   ),
                 ),
 
                 const SizedBox(height: 25),
 
-                // AMOUNT CARD
+                // AMOUNT
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 0,
-                    vertical: 0,
-                  ),
+
+                  width: double.infinity,
+
+                  padding:
+                  const EdgeInsets.all(15),
 
                   decoration: BoxDecoration(
-                    color: Colors.orange.shade50,
 
+                    color:
+                    Colors.orange.shade50,
+
+                    borderRadius:
+                    BorderRadius.circular(15),
                   ),
 
-                  child: Row(
-                    mainAxisAlignment:
-                    MainAxisAlignment.spaceBetween,
-                    children: const [
+                  child: const Column(
+
+                    children: [
+
+
+                      SizedBox(height: 8),
+
+
                     ],
                   ),
                 ),
@@ -222,41 +378,64 @@ class _PaymentPageState extends State<PaymentPage> {
 
                 // PAY BUTTON
                 SizedBox(
+
                   width: double.infinity,
+
                   height: 55,
 
                   child: ElevatedButton(
+
                     onPressed: () {
+
                       openPayment();
                     },
 
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange,
-                      shape: RoundedRectangleBorder(
+                    style:
+                    ElevatedButton.styleFrom(
+
+                      backgroundColor:
+                      Colors.orange,
+
+                      shape:
+                      RoundedRectangleBorder(
+
                         borderRadius:
                         BorderRadius.circular(15),
                       ),
+
                       elevation: 5,
                     ),
 
                     child: const Row(
+
                       mainAxisAlignment:
                       MainAxisAlignment.center,
+
                       children: [
 
                         Icon(
+
                           Icons.lock,
-                          color: Colors.white,
+
+                          color:
+                          Colors.white,
                         ),
 
                         SizedBox(width: 10),
 
                         Text(
+
                           "Pay Now",
+
                           style: TextStyle(
+
                             fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
+
+                            fontWeight:
+                            FontWeight.bold,
+
+                            color:
+                            Colors.white,
                           ),
                         ),
                       ],

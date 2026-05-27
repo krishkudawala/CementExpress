@@ -1,4 +1,5 @@
 import 'package:cementexpress/Screens/Home/home_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -38,11 +39,16 @@ class _SignupState extends State<Signup> {
   Future<void> registerNow() async {
 
     if (emailController.text.trim().isEmpty ||
-        passwordController.text.trim().isEmpty) {
+        passwordController.text.trim().isEmpty ||
+        nameController.text.trim().isEmpty ||
+        phoneController.text.trim().isEmpty) {
 
-      ScaffoldMessenger.of(context).showSnackBar(
+      ScaffoldMessenger.of(context)
+          .showSnackBar(
+
         const SnackBar(
-          content: Text("Please fill all fields"),
+          content:
+          Text("Please fill all fields"),
         ),
       );
 
@@ -55,39 +61,83 @@ class _SignupState extends State<Signup> {
 
     try {
 
-      await auth.createUserWithEmailAndPassword(
+      // CREATE USER
+      UserCredential userCredential =
+      await auth
+          .createUserWithEmailAndPassword(
 
-        email: emailController.text.trim(),
+        email:
+        emailController.text.trim(),
 
-        password: passwordController.text.trim(),
+        password:
+        passwordController.text.trim(),
       );
 
-      ScaffoldMessenger.of(context).showSnackBar(
+      // USER ID
+      String uid =
+          userCredential.user!.uid;
+
+      // SAVE USER DATA
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(uid)
+          .set({
+
+        "uid": uid,
+
+        "name":
+        nameController.text.trim(),
+
+        "email":
+        emailController.text.trim(),
+
+        "phone":
+        phoneController.text.trim(),
+
+        "createdAt":
+        DateTime.now(),
+      });
+
+      ScaffoldMessenger.of(context)
+          .showSnackBar(
+
         const SnackBar(
-          content: Text("Account Created Successfully"),
+          content: Text(
+            "Account Created Successfully",
+          ),
         ),
       );
 
       Navigator.pushReplacement(
+
         context,
+
         MaterialPageRoute(
-          builder: (context) => const HomeScreen(),
+          builder:
+              (context) =>
+          const HomeScreen(),
         ),
       );
 
     } on FirebaseAuthException catch (e) {
 
-      ScaffoldMessenger.of(context).showSnackBar(
+      ScaffoldMessenger.of(context)
+          .showSnackBar(
+
         SnackBar(
-          content: Text(e.message ?? "Error"),
+          content:
+          Text(e.message ?? "Error"),
         ),
       );
 
     } catch (e) {
 
-      ScaffoldMessenger.of(context).showSnackBar(
+      ScaffoldMessenger.of(context)
+          .showSnackBar(
+
         SnackBar(
-          content: Text(e.toString()),
+          content:
+          Text(e.toString()),
         ),
       );
 
@@ -172,7 +222,7 @@ class _SignupState extends State<Signup> {
 
                   const SizedBox(height: 8),
 
-                  Text(
+                  const Text(
 
                     "Just a few details to get your cement delivered to your site.",
 
@@ -188,13 +238,16 @@ class _SignupState extends State<Signup> {
                   // NAME
                   _buildInputField(
 
-                    controller: nameController,
+                    controller:
+                    nameController,
 
                     label: "Full Name",
 
-                    hint: "e.g. Ramesh Kumar",
+                    hint:
+                    "e.g. Ramesh Kumar",
 
-                    icon: Icons.person_outline,
+                    icon:
+                    Icons.person_outline,
 
                     keyboardType:
                     TextInputType.name,
@@ -205,13 +258,17 @@ class _SignupState extends State<Signup> {
                   // EMAIL
                   _buildInputField(
 
-                    controller: emailController,
+                    controller:
+                    emailController,
 
-                    label: "Email Address",
+                    label:
+                    "Email Address",
 
-                    hint: "e.g. abc@gmail.com",
+                    hint:
+                    "e.g. abc@gmail.com",
 
-                    icon: Icons.email_outlined,
+                    icon:
+                    Icons.email_outlined,
 
                     keyboardType:
                     TextInputType.emailAddress,
@@ -222,13 +279,17 @@ class _SignupState extends State<Signup> {
                   // PHONE
                   _buildInputField(
 
-                    controller: phoneController,
+                    controller:
+                    phoneController,
 
-                    label: "Phone Number",
+                    label:
+                    "Phone Number",
 
-                    hint: "e.g. 98765XXXXX",
+                    hint:
+                    "e.g. 98765XXXXX",
 
-                    icon: Icons.phone_android,
+                    icon:
+                    Icons.phone_android,
 
                     keyboardType:
                     TextInputType.phone,
@@ -239,13 +300,16 @@ class _SignupState extends State<Signup> {
                   // PASSWORD
                   _buildInputField(
 
-                    controller: passwordController,
+                    controller:
+                    passwordController,
 
                     label: "Password",
 
-                    hint: "Enter Password",
+                    hint:
+                    "Enter Password",
 
-                    icon: Icons.lock_outline,
+                    icon:
+                    Icons.lock_outline,
 
                     keyboardType:
                     TextInputType.visiblePassword,
@@ -266,7 +330,8 @@ class _SignupState extends State<Signup> {
                           ? null
                           : () {
 
-                        if (formkey.currentState!
+                        if (formkey
+                            .currentState!
                             .validate()) {
 
                           registerNow();
@@ -333,7 +398,9 @@ class _SignupState extends State<Signup> {
                           "Login",
 
                           style: TextStyle(
-                            color: Colors.deepOrange,
+                            color:
+                            Colors.deepOrange,
+
                             fontWeight:
                             FontWeight.bold,
                           ),
@@ -360,7 +427,8 @@ class _SignupState extends State<Signup> {
     required IconData icon,
     required TextInputType keyboardType,
 
-    required TextEditingController controller,
+    required TextEditingController
+    controller,
 
     bool readOnly = false,
     bool obscureText = false,
@@ -407,11 +475,13 @@ class _SignupState extends State<Signup> {
 
             controller: controller,
 
-            keyboardType: keyboardType,
+            keyboardType:
+            keyboardType,
 
             readOnly: readOnly,
 
-            obscureText: obscureText,
+            obscureText:
+            obscureText,
 
             onTap: onTap,
 
@@ -430,15 +500,18 @@ class _SignupState extends State<Signup> {
 
               prefixIcon: Icon(
                 icon,
-                color: Colors.grey.shade500,
+                color:
+                Colors.grey.shade500,
               ),
 
-              border: InputBorder.none,
+              border:
+              InputBorder.none,
 
               hintText: hint,
 
               hintStyle: TextStyle(
-                color: Colors.grey.shade400,
+                color:
+                Colors.grey.shade400,
                 fontSize: 15,
               ),
 

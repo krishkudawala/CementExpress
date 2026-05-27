@@ -223,7 +223,7 @@ class AboutAppPage extends StatelessWidget {
 
                   const Text(
 
-                    "Krish Kudawala",
+                    "Krish Kudawala Rajput",
 
                     style: TextStyle(
                       fontSize: 16,

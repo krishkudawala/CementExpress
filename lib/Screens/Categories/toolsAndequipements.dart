@@ -12,8 +12,9 @@ class ToolsEquipmentPage extends StatefulWidget {
 
 class _ToolsEquipmentPageState
     extends State<ToolsEquipmentPage> {
-  final dbreference =FirebaseFirestore.instance.collection('Tools');
-
+  final dbreference =
+  FirebaseFirestore.instance
+      .collection('orders');
   int totalPrice = 0;
 
   final List<Map<String, dynamic>> tools = [
@@ -459,6 +460,9 @@ class _ToolsEquipmentPageState
                   'product':
                   item['name'],
 
+                  'category':
+                  'Tools',
+
                   'price':
                   item['price'],
 
@@ -472,9 +476,8 @@ class _ToolsEquipmentPageState
                   'status':
                   'Processing',
 
-                  'date':
-                  DateTime.now()
-                      .toString(),
+                  'createdAt':
+                  FieldValue.serverTimestamp(),
                 });
               }
             }

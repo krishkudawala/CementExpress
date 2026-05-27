@@ -16,9 +16,7 @@ class _UltraTechPageState
   int totalPrice = 0;
 
   // FIRESTORE
-  final dbreference =
-  FirebaseFirestore.instance
-      .collection('orders');
+  final dbreference = FirebaseFirestore.instance.collection('orders');
 
   final List<Map<String, dynamic>> products = [
 

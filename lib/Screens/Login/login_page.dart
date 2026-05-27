@@ -1,6 +1,8 @@
+import 'package:cementexpress/AdminScreen/AdminLogin/adminlogin.dart';
 import 'package:cementexpress/Screens/Home/home_screen.dart';
 import 'package:cementexpress/Screens/Signup/signup.dart';
 import 'package:cementexpress/Screens/forget/forget_password.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -42,10 +44,16 @@ class _LoginPageState extends State<LoginPage> {
         password: password.text.trim(),
       );
 
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(
-              builder: (context) =>HomeScreen()
-          ), (value) =>false);
+      Navigator.pushAndRemoveUntil(
+
+        context,
+
+        MaterialPageRoute(
+          builder: (context) => HomeScreen(),
+        ),
+
+            (value) => false,
+      );
 
     } on FirebaseAuthException catch (e) {
 
@@ -274,10 +282,7 @@ class _LoginPageState extends State<LoginPage> {
 
                         onPressed: () {
 
-                          if (formkey
-                              .currentState!
-                              .validate()) {
-
+                          if (formkey.currentState!.validate()) {
                             login();
                           }
                         },
@@ -321,9 +326,17 @@ class _LoginPageState extends State<LoginPage> {
                       child: TextButton(
 
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(
-                              builder: (context) =>ForgetPassword()
-                          ));
+
+                          Navigator.push(
+
+                            context,
+
+                            MaterialPageRoute(
+
+                              builder: (context) =>
+                                  ForgetPassword(),
+                            ),
+                          );
                         },
 
                         child: const Text(
@@ -333,6 +346,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
 
                     const SizedBox(height: 35),
+
                     // ================= SIGNUP =================
 
                     Row(
@@ -401,6 +415,61 @@ class _LoginPageState extends State<LoginPage> {
 
                       style: TextStyle(
                         color: Colors.grey,
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    // ================= ADMIN MENU =================
+
+                    Align(
+
+                      alignment: Alignment.centerRight,
+
+                      child: PopupMenuButton<String>(
+
+                        icon: const Icon(
+                          Icons.more_vert,
+                          color: Colors.black,
+                          size: 28,
+                        ),
+
+                        onSelected: (value) {
+
+                          if (value == 'admin') {
+
+                            Navigator.push(
+
+                              context,
+
+                              MaterialPageRoute(
+
+                                builder: (context) =>
+                                const Adminlogin(),
+                              ),
+                            );
+                          }
+                        },
+
+                        itemBuilder: (BuildContext context) => [
+
+                          const PopupMenuItem(
+
+                            value: 'admin',
+
+                            child: Row(
+
+                              children: [
+
+                                Icon(Icons.admin_panel_settings),
+
+                                SizedBox(width: 10),
+
+                                Text("Admin Portal"),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
 

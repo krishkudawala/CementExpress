@@ -14,8 +14,9 @@ class _BuildingMaterialPageState
     extends State<BuildingMaterialPage> {
 
   int totalPrice = 0;
-  final dbreference =FirebaseFirestore.instance.collection('Buildingmaterials');
-
+  final dbreference =
+  FirebaseFirestore.instance
+      .collection('orders');
   final List<Map<String, dynamic>> materials = [
 
     {
@@ -448,6 +449,9 @@ class _BuildingMaterialPageState
                   'product':
                   item['name'],
 
+                  'category':
+                  'Building Material',
+
                   'price':
                   item['price'],
 
@@ -461,9 +465,8 @@ class _BuildingMaterialPageState
                   'status':
                   'Processing',
 
-                  'date':
-                  DateTime.now()
-                      .toString(),
+                  'createdAt':
+                  FieldValue.serverTimestamp(),
                 });
               }
             }

@@ -1,8 +1,67 @@
 import 'package:flutter/material.dart';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
-class EditProfilePage extends StatelessWidget {
+class EditProfilePage extends StatefulWidget {
   const EditProfilePage({super.key});
+
+  @override
+  State<EditProfilePage> createState() => _EditProfilePageState();
+}
+
+class _EditProfilePageState extends State<EditProfilePage> {
+
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final phoneController = TextEditingController();
+
+  final user = FirebaseAuth.instance.currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+    loadUserData();
+  }
+
+  // LOAD USER DATA
+  Future<void> loadUserData() async {
+
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(user!.uid)
+        .get();
+
+    if (snapshot.exists) {
+
+      Map<String, dynamic> data =
+      snapshot.data() as Map<String, dynamic>;
+
+      nameController.text = data["name"] ?? "";
+      emailController.text = data["email"] ?? "";
+      phoneController.text = data["phone"] ?? "";
+    }
+  }
+
+  // SAVE / UPDATE DATA
+  Future<void> saveProfile() async {
+
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(user!.uid)
+        .set({
+      "name": nameController.text.trim(),
+      "email": emailController.text.trim(),
+      "phone": phoneController.text.trim(),
+    }, SetOptions(merge: true));
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Profile Updated Successfully"),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,31 +79,34 @@ class EditProfilePage extends StatelessWidget {
           children: [
 
             TextField(
-              decoration: InputDecoration(
+              controller: nameController,
+              decoration: const InputDecoration(
                 labelText: "Full Name",
                 border: OutlineInputBorder(),
               ),
             ),
 
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             TextField(
-              decoration: InputDecoration(
+              controller: emailController,
+              decoration: const InputDecoration(
                 labelText: "Email",
                 border: OutlineInputBorder(),
               ),
             ),
 
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             TextField(
-              decoration: InputDecoration(
+              controller: phoneController,
+              decoration: const InputDecoration(
                 labelText: "Phone Number",
                 border: OutlineInputBorder(),
               ),
             ),
 
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
 
             SizedBox(
               width: double.infinity,
@@ -52,7 +114,7 @@ class EditProfilePage extends StatelessWidget {
 
               child: ElevatedButton(
 
-                onPressed: () {},
+                onPressed: saveProfile,
 
                 child: const Text("Save"),
               ),
@@ -63,7 +125,6 @@ class EditProfilePage extends StatelessWidget {
     );
   }
 }
-
 
 
 class SavedAddressPage extends StatelessWidget {
